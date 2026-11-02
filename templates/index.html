@@ -1,0 +1,572 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ANNASETU AI | Food Rescue Platform</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #f0fff4, #ffffff);
+            color: #1f2937;
+            min-height: 100vh;
+        }
+
+        /* NAVBAR */
+        nav {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #16a34a;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #16a34a;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 11px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .login-btn {
+            color: #16a34a;
+            border: 1px solid #16a34a;
+            background: white;
+        }
+
+        .login-btn:hover {
+            background: #f0fdf4;
+        }
+
+        .register-btn {
+            background: #16a34a;
+            color: white;
+        }
+
+        .register-btn:hover {
+            background: #15803d;
+        }
+
+        /* HERO */
+        .hero {
+            min-height: calc(100vh - 70px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 7%;
+        }
+
+        .hero-container {
+            max-width: 1150px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #dcfce7;
+            color: #15803d;
+            padding: 8px 15px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 54px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            color: #111827;
+        }
+
+        h1 span {
+            color: #16a34a;
+        }
+
+        .description {
+            font-size: 19px;
+            line-height: 1.7;
+            color: #4b5563;
+            margin-bottom: 30px;
+            max-width: 650px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .primary-btn {
+            background: #16a34a;
+            color: white;
+            padding: 14px 25px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .primary-btn:hover {
+            background: #15803d;
+        }
+
+        .secondary-btn {
+            background: white;
+            color: #15803d;
+            border: 1px solid #16a34a;
+            padding: 14px 25px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .secondary-btn:hover {
+            background: #f0fdf4;
+        }
+
+        /* VISUAL CARD */
+        .visual {
+            display: flex;
+            justify-content: center;
+        }
+
+        .ai-card {
+            width: 380px;
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.10);
+            border: 1px solid #dcfce7;
+        }
+
+        .ai-icon {
+            width: 75px;
+            height: 75px;
+            border-radius: 20px;
+            background: #dcfce7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            margin-bottom: 20px;
+        }
+
+        .ai-card h2 {
+            font-size: 25px;
+            margin-bottom: 10px;
+            color: #111827;
+        }
+
+        .ai-card p {
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .flow {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .flow-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f9fafb;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .flow-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #16a34a;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* FEATURES */
+        .features {
+            max-width: 1150px;
+            margin: 0 auto;
+            padding: 20px 7% 70px;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 35px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .feature {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .feature h3 {
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .feature p {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* FOOTER */
+        footer {
+            background: #111827;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        footer p {
+            color: #d1d5db;
+            font-size: 14px;
+        }
+
+        /* MOBILE */
+        @media (max-width: 900px) {
+
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .description {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .visual {
+                margin-top: 20px;
+            }
+
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            h1 {
+                font-size: 42px;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            nav {
+                padding: 0 5%;
+            }
+
+            .logo {
+                font-size: 19px;
+            }
+
+            .nav-buttons {
+                gap: 5px;
+            }
+
+            .btn {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+
+            .hero {
+                padding: 40px 5%;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            .description {
+                font-size: 16px;
+            }
+
+            .ai-card {
+                width: 100%;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVIGATION -->
+    <nav>
+
+        <div class="logo">
+            <div class="logo-icon">♻</div>
+            ANNASETU AI
+        </div>
+
+        <div class="nav-buttons">
+            <a href="/login" class="btn login-btn">Login</a>
+            <a href="/register" class="btn register-btn">Create Account</a>
+        </div>
+
+    </nav>
+
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+
+        <div class="hero-container">
+
+            <div>
+
+                <div class="tag">
+                    🤖 AI-Powered Food Rescue
+                </div>
+
+                <h1>
+                    Turning Surplus Food Into
+                    <span>Hope</span>
+                </h1>
+
+                <p class="description">
+                    ANNASETU AI is an intelligent food rescue and
+                    redistribution platform that connects surplus food
+                    providers with suitable nearby receivers using
+                    AI-powered matching.
+                </p>
+
+                <div class="hero-buttons">
+
+                    <a href="/login" class="primary-btn">
+                        Get Started
+                    </a>
+
+                    <a href="/register" class="secondary-btn">
+                        Create Account
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- AI FLOW CARD -->
+            <div class="visual">
+
+                <div class="ai-card">
+
+                    <div class="ai-icon">
+                        🤖
+                    </div>
+
+                    <h2>
+                        Intelligent Food Rescue
+                    </h2>
+
+                    <p>
+                        Our AI agents help identify the best
+                        food and receiver matches.
+                    </p>
+
+                    <div class="flow">
+
+                        <div class="flow-item">
+                            <div class="flow-number">1</div>
+                            🍱 Food Provider Posts Food
+                        </div>
+
+                        <div class="flow-item">
+                            <div class="flow-number">2</div>
+                            🤖 AI Finds Best Receiver
+                        </div>
+
+                        <div class="flow-item">
+                            <div class="flow-number">3</div>
+                            🔔 Receiver Gets Notification
+                        </div>
+
+                        <div class="flow-item">
+                            <div class="flow-number">4</div>
+                            🤝 Food Gets Collected
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FEATURES -->
+    <section class="features">
+
+        <h2>
+            How ANNASETU AI Helps
+        </h2>
+
+        <div class="feature-grid">
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    🍱
+                </div>
+
+                <h3>
+                    Food Rescue
+                </h3>
+
+                <p>
+                    Helps prevent usable surplus food
+                    from becoming waste.
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    🤖
+                </div>
+
+                <h3>
+                    AI Matching
+                </h3>
+
+                <p>
+                    AI analyzes food and receiver
+                    suitability.
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    📍
+                </div>
+
+                <h3>
+                    Nearby Receivers
+                </h3>
+
+                <p>
+                    Finds suitable receivers based
+                    on location and other factors.
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    🌱
+                </div>
+
+                <h3>
+                    Social Impact
+                </h3>
+
+                <p>
+                    Supports a smarter and more
+                    sustainable food ecosystem.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer>
+
+        <p>
+            © 2026 ANNASETU AI — An Intelligent AI-Powered
+            Food Rescue & Redistribution Platform
+        </p>
+
+    </footer>
+
+
+</body>
+</html>
+```

@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>FoodLoop AI - Admin & Impact Analytics</title>
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:#f4f7f5;color:#202a24}
+.nav{background:#fff;border-bottom:1px solid #ddd;padding:18px 28px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}
+.brand{font-size:25px;font-weight:800;color:#197b36}.nav a{margin-left:18px;text-decoration:none;color:#333;font-weight:700}
+.wrap{max-width:1400px;margin:28px auto;padding:0 20px}.hero{background:#fff;border-radius:18px;padding:25px;box-shadow:0 2px 12px #0000000b}
+.hero h1{margin:0 0 8px;color:#176b2f}.sub{color:#66736a}.actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.btn{border:0;border-radius:10px;padding:12px 18px;font-weight:800;cursor:pointer;background:#247d35;color:#fff}.btn.secondary{background:#e8eee9;color:#174f25}
+.filters{margin-top:18px;background:#f7faf7;border:1px solid #e0e8e2;border-radius:12px;padding:14px;display:flex;gap:12px;align-items:end;flex-wrap:wrap}
+.filters label{font-weight:800;font-size:13px;display:flex;flex-direction:column;gap:6px}.filters input{padding:10px;border:1px solid #cfd9d1;border-radius:8px;background:#fff}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:20px}.card{background:#fff;border:1px solid #e1e8e3;border-radius:14px;padding:18px}
+.label{font-weight:700;color:#59645d;font-size:14px}.value{font-size:31px;font-weight:800;color:#176b2f;margin-top:8px}
+.section{margin-top:22px;background:#fff;border-radius:18px;padding:22px}.section h2{margin-top:0}.cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.chartbox{position:relative;width:100%;height:340px}.chartbox.small{height:280px}.chartbox canvas{width:100%;height:100%;display:block}
+.chart-legend{display:flex;gap:18px;flex-wrap:wrap;margin:0 0 12px;font-weight:700;font-size:13px}.legend-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+.barrow{margin:12px 0}.barhead{display:flex;justify-content:space-between;font-weight:700}.bar{height:12px;background:#e8eee9;border-radius:10px;overflow:hidden;margin-top:5px}.fill{height:100%;background:#2c8a3c;border-radius:10px}
+.list{display:grid;gap:10px}.item{border:1px solid #e0e8e2;border-left:5px solid #2c8a3c;border-radius:10px;padding:12px;background:#fbfdfb}.pill{display:inline-block;padding:6px 10px;border-radius:15px;background:#e6f3e8;color:#176b2f;font-weight:800;font-size:13px}
+.warn{border-left-color:#e5a400}.danger{border-left-color:#d33}.muted{color:#6b756e}.status{font-weight:800}.tablewrap{overflow:auto}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px;border-bottom:1px solid #e7ece8}th{background:#f5f8f5}
+.msg{display:none;margin-top:12px;padding:12px;border-radius:10px;background:#e6f6e8;color:#176b2f;font-weight:700}
+.trend-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.trend-kpi{background:#f8fbf8;border:1px solid #e1e8e3;border-radius:12px;padding:14px}.trend-kpi b{font-size:24px;color:#176b2f;display:block;margin-top:6px}
+.empty{padding:30px;text-align:center;color:#6b756e;background:#fafcfb;border-radius:12px}
+.location-kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.location-kpi{background:#f8fbf8;border:1px solid #e1e8e3;border-radius:12px;padding:14px}.location-kpi b{display:block;font-size:24px;color:#176b2f;margin-top:6px}.location-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:20px}.location-map{position:relative;height:390px;background:#f7faf8;border:1px solid #dfe8e1;border-radius:14px;overflow:hidden}.location-map canvas{width:100%;height:100%;display:block}.location-legend{display:flex;gap:16px;flex-wrap:wrap;font-weight:700;font-size:13px;margin-top:10px}.location-dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px}.area-table{width:100%;border-collapse:collapse}.area-table th,.area-table td{padding:9px;border-bottom:1px solid #e7ece8;text-align:left;font-size:13px}.area-table th{background:#f5f8f5}.coverage-bars .bar{height:16px}.info-note{padding:12px;border-radius:10px;background:#eef7f0;border:1px solid #d8eadb;color:#245b31;margin-top:10px}
+
+@media(max-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}.trend-kpis{grid-template-columns:repeat(2,1fr)}.cols,.location-grid{grid-template-columns:1fr}.location-kpis{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.grid{grid-template-columns:repeat(2,1fr)}.trend-kpis{grid-template-columns:1fr}.location-kpis{grid-template-columns:repeat(2,1fr)}.nav{padding:14px}.nav a{margin-left:8px}.wrap{padding:0 10px}.chartbox{height:260px}.location-map{height:300px}}
+@media print{.nav,.actions,.filters,.msg{display:none!important}.section,.hero{box-shadow:none;border:1px solid #ddd}.wrap{max-width:none}}
+</style>
+</head>
+<body>
+<div class="nav">
+  <div class="brand">🍱 FoodLoop AI</div>
+  <div><span>Admin: {{ user.name or user.email }}</span><a href="/provider">Provider</a><a href="/logout">Logout</a></div>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <h1>📊 Admin & Impact Analytics</h1>
+    <div class="sub">Central view of FoodLoop activity, food rescue, network growth, notifications and AI urgency.</div>
+    <div class="actions">
+      <button class="btn" onclick="loadDashboard()">🔄 Refresh Analytics</button>
+      <button class="btn secondary" onclick="loadTrends()">📈 Refresh Trends</button>
+      <button class="btn secondary" onclick="window.print()">🖨️ Print Report</button>
+    </div>
+    <div class="filters">
+      <label>Start date
+        <input id="startDate" type="date">
+      </label>
+      <label>End date
+        <input id="endDate" type="date">
+      </label>
+      <button class="btn" onclick="loadTrends()">Apply Date Range</button>
+      <button class="btn secondary" onclick="clearDates()">Last 12 Months</button>
+    </div>
+    <div id="msg" class="msg"></div>
+  </div>
+
+  <div id="metrics" class="grid"></div>
+
+  <div class="cols">
+    <div class="section"><h2>🍱 Food Impact</h2><div id="foodImpact"></div></div>
+    <div class="section"><h2>👥 Network</h2><div id="network"></div></div>
+  </div>
+
+  <div class="section">
+    <h2>📈 Advanced Trends</h2>
+    <div id="trendRange" class="muted"></div>
+    <div class="trend-kpis" id="trendKpis"></div>
+  </div>
+
+  <div class="cols">
+    <div class="section">
+      <h2>🍱 Food Posted vs Rescued</h2>
+      <div class="chart-legend">
+        <span><i class="legend-dot" style="background:#2c8a3c"></i>Posted</span>
+        <span><i class="legend-dot" style="background:#176b2f"></i>Rescued</span>
+        <span><i class="legend-dot" style="background:#d33"></i>Expired</span>
+      </div>
+      <div class="chartbox"><canvas id="foodTrendChart"></canvas></div>
+    </div>
+    <div class="section">
+      <h2>📦 Request Trends</h2>
+      <div class="chart-legend">
+        <span><i class="legend-dot" style="background:#6b8fd6"></i>Total</span>
+        <span><i class="legend-dot" style="background:#2c8a3c"></i>Collected</span>
+        <span><i class="legend-dot" style="background:#e5a400"></i>Pending</span>
+      </div>
+      <div class="chartbox"><canvas id="requestTrendChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="cols">
+    <div class="section">
+      <h2>👥 User Growth</h2>
+      <div class="chartbox small"><canvas id="userTrendChart"></canvas></div>
+    </div>
+    <div class="section">
+      <h2>🔔 Notification Trends</h2>
+      <div class="chartbox small"><canvas id="notificationTrendChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="cols">
+    <div class="section"><h2>🥗 Food by Type</h2><div id="types"></div></div>
+    <div class="section"><h2>📅 Monthly Food Activity</h2><div id="monthly"></div></div>
+  </div>
+
+
+  <div class="section">
+    <h2>📍 Phase 4.3 Location / Area Analytics</h2>
+    <div class="sub">Understand where food is posted, which areas rescue the most food, and how well the receiver network covers geo-tagged food.</div>
+    <div class="actions">
+      <button class="btn" onclick="loadLocationAnalytics()">📍 Refresh Location Analytics</button>
+    </div>
+    <div id="locationMsg" class="msg"></div>
+    <div class="location-kpis" id="locationKpis"></div>
+    <div class="location-grid" style="margin-top:18px">
+      <div>
+        <h3>🗺️ Food & Receiver Coverage</h3>
+        <div class="location-map"><canvas id="locationMap"></canvas></div>
+        <div class="location-legend">
+          <span><i class="location-dot" style="background:#2c8a3c"></i>Available food</span>
+          <span><i class="location-dot" style="background:#176b2f"></i>Rescued food</span>
+          <span><i class="location-dot" style="background:#d33"></i>Expired food</span>
+          <span><i class="location-dot" style="background:#6b8fd6"></i>Receiver</span>
+        </div>
+        <div class="info-note">The map uses stored latitude/longitude from FoodLoop. It is an analytics view only and does not modify locations.</div>
+      </div>
+      <div>
+        <h3>📏 Receiver Coverage</h3>
+        <div id="coverageBars" class="coverage-bars"></div>
+      </div>
+    </div>
+    <div class="cols" style="margin-top:20px">
+      <div>
+        <h3>📍 Top Pickup Areas</h3>
+        <div class="tablewrap"><table class="area-table"><thead><tr><th>Area</th><th>Food</th><th>Available</th><th>Rescued</th><th>Rescue %</th></tr></thead><tbody id="areaRows"></tbody></table></div>
+      </div>
+      <div>
+        <h3>🏢 Provider Area Distribution</h3>
+        <div id="providerAreas"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section"><h2>🚨 AI Rescue / Urgency Queue</h2><div id="rescue" class="list"></div></div>
+  <div class="section"><h2>📦 Recent Food Requests</h2><div id="requests" class="list"></div></div>
+
+  <div class="section">
+    <h2>🏆 Phase 4.4 — Provider & Receiver Performance</h2>
+    <p class="muted">Compare provider rescue performance and receiver request/collection performance. Analytics are read-only.</p>
+    <div id="performanceMsg" class="msg" style="display:none"></div>
+    <div id="performanceKpis" class="metrics"></div>
+    <div class="two-col">
+      <div>
+        <h3>🏢 Provider Performance</h3>
+        <div class="tablewrap"><table><thead><tr><th>Provider</th><th>Food</th><th>Rescued</th><th>Requests</th><th>Collected</th><th>Rescue %</th><th>Conversion %</th><th>Score</th></tr></thead><tbody id="providerPerformanceRows"></tbody></table></div>
+      </div>
+      <div>
+        <h3>🏠 Receiver Performance</h3>
+        <div class="tablewrap"><table><thead><tr><th>Receiver</th><th>Requests</th><th>Accepted</th><th>Collected</th><th>Rejected</th><th>Success %</th><th>Location</th><th>Score</th></tr></thead><tbody id="receiverPerformanceRows"></tbody></table></div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="section" id="phase46">
+    <h2>📅 Phase 4.6 — Date-Range Reports & Period Comparison</h2>
+    <p class="muted">
+      Generate a report strictly for the selected period. Compare it with the previous period of the same length,
+      review daily activity, and export the selected date-range report as CSV. This section is read-only.
+    </p>
+    <div class="filters" style="margin-top:12px">
+      <label>Quick range
+        <select id="reportPreset" onchange="applyReportPreset()">
+          <option value="last_7_days">Last 7 Days</option>
+          <option value="last_30_days" selected>Last 30 Days</option>
+          <option value="this_month">This Month</option>
+          <option value="last_month">Last Month</option>
+          <option value="this_year">This Year</option>
+          <option value="today">Today</option>
+          <option value="yesterday">Yesterday</option>
+          <option value="custom">Custom Range</option>
+          <option value="all_time">All Time</option>
+        </select>
+      </label>
+      <label>Start date
+        <input id="rangeStartDate" type="date">
+      </label>
+      <label>End date
+        <input id="rangeEndDate" type="date">
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;padding-top:22px">
+        <input id="comparePrevious" type="checkbox" checked>
+        Compare previous period
+      </label>
+      <button class="btn" onclick="loadDateRangeReport()">📅 Generate Date-Range Report</button>
+      <button class="btn secondary" onclick="downloadDateRangeReport()">⬇️ Date-Range CSV</button>
+    </div>
+    <div id="rangeMsg" class="msg" style="display:none"></div>
+    <div id="rangeKpis" class="metrics" style="margin-top:16px"></div>
+
+    <div class="two-col" style="margin-top:18px">
+      <div>
+        <h3>📊 Selected Period</h3>
+        <div id="rangeCurrent" class="list"></div>
+      </div>
+      <div>
+        <h3>🔄 Previous Period Comparison</h3>
+        <div id="rangeComparison" class="list"></div>
+      </div>
+    </div>
+
+    <div style="margin-top:18px">
+      <h3>📈 Daily Activity</h3>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Date</th><th>Food Posted</th><th>Food Rescued</th><th>Requests</th><th>Collected Requests</th></tr></thead>
+          <tbody id="rangeDailyRows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="margin-top:18px">
+      <h3>🏆 Top Providers in Selected Range</h3>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Provider</th><th>Food</th><th>Rescued</th><th>Requests</th><th>Collected</th><th>Score</th></tr></thead>
+          <tbody id="rangeProviderRows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="margin-top:18px">
+      <h3>🏠 Top Receivers in Selected Range</h3>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Receiver</th><th>Requests</th><th>Accepted</th><th>Collected</th><th>Success %</th><th>Score</th></tr></thead>
+          <tbody id="rangeReceiverRows"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>📊 Phase 4.5 — Impact Reporting & Export</h2>
+    <p class="muted">
+      Generate a consolidated, read-only FoodLoop AI impact report for the selected date range.
+      Export summary, provider/receiver performance, and monthly trend data without changing operational data.
+    </p>
+
+    <div class="actions">
+      <button class="btn" onclick="loadImpactReport()">📊 Generate Impact Report</button>
+      <button class="btn secondary" onclick="downloadAdminExport('/api/admin/export/summary.csv')">⬇️ Summary CSV</button>
+      <button class="btn secondary" onclick="downloadAdminExport('/api/admin/export/performance.csv')">⬇️ Performance CSV</button>
+      <button class="btn secondary" onclick="downloadAdminExport('/api/admin/export/trends.csv')">⬇️ Trends CSV</button>
+      <button class="btn secondary" onclick="window.print()">🖨️ Print Current Report</button>
+    </div>
+
+    <div id="reportMsg" class="msg" style="display:none"></div>
+    <div id="reportKpis" class="metrics" style="margin-top:16px"></div>
+
+    <div class="two-col" style="margin-top:18px">
+      <div>
+        <h3>🌱 Impact Summary</h3>
+        <div id="reportImpact" class="list"></div>
+      </div>
+      <div>
+        <h3>📍 Network Summary</h3>
+        <div id="reportNetwork" class="list"></div>
+      </div>
+    </div>
+
+    <div style="margin-top:18px">
+      <h3>🏆 Top Performing Providers</h3>
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Provider</th>
+              <th>Food</th>
+              <th>Rescued</th>
+              <th>Requests</th>
+              <th>Collected</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody id="reportProviders"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="margin-top:18px">
+      <h3>🏆 Top Performing Receivers</h3>
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Receiver</th>
+              <th>Requests</th>
+              <th>Accepted</th>
+              <th>Collected</th>
+              <th>Success %</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody id="reportReceivers"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section"><h2>🔔 Notification Analytics</h2><div id="notifications"></div></div>
+
+  <div class="section">
+    <h2>👤 Recent Users</h2>
+    <div class="tablewrap">
+      <table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Created</th></tr></thead>
+      <tbody id="users"></tbody></table>
+    </div>
+  </div>
+</div>
+
+
+  <div class="section" id="phase47">
+    <h2>🛡️ Phase 4.7 — Admin Control Center & Impact Intelligence</h2>
+    <p class="muted">Read-only administrator view for system health, data quality, impact metrics and user visibility. Operational food, request and notification records are not changed here.</p>
+    <div id="phase47Msg" class="msg" style="display:none"></div>
+
+    <div class="grid" id="controlKpis">
+      <div class="card"><div class="label">📊 Impact Index</div><div class="value">—</div></div>
+      <div class="card"><div class="label">🛡️ System Score</div><div class="value">—</div></div>
+      <div class="card"><div class="label">♻️ Food Rescued</div><div class="value">—</div></div>
+      <div class="card"><div class="label">🍽️ Meals Rescued</div><div class="value">—</div></div>
+      <div class="card"><div class="label">📈 Rescue Rate</div><div class="value">—</div></div>
+      <div class="card"><div class="label">📈 Collection Rate</div><div class="value">—</div></div>
+      <div class="card"><div class="label">👥 Providers</div><div class="value">—</div></div>
+      <div class="card"><div class="label">🏠 Receivers</div><div class="value">—</div></div>
+    </div>
+
+    <div class="actions" style="margin:14px 0;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn" onclick="loadPhase47ControlCenter()">🔄 Refresh Control Center</button>
+      <button class="btn secondary" onclick="loadPhase47Quality()">🧪 Run Data Quality Audit</button>
+      <button class="btn secondary" onclick="window.location.href='/api/admin/export/impact.csv'">⬇️ Impact CSV</button>
+      <button class="btn secondary" onclick="window.location.href='/api/admin/export/users.csv'">⬇️ Users CSV</button>
+    </div>
+
+    <div class="grid" style="grid-template-columns:1fr 1fr;gap:18px">
+      <div>
+        <h3>🛡️ System Health</h3>
+        <div id="phase47System" class="list"></div>
+      </div>
+      <div>
+        <h3>🧪 Data Quality</h3>
+        <div id="phase47Quality" class="list"></div>
+      </div>
+    </div>
+
+    <div style="margin-top:18px">
+      <h3>🥗 Food Type Distribution</h3>
+      <div id="phase47FoodTypes" class="list"></div>
+    </div>
+
+    <div style="margin-top:18px">
+      <h3>👥 Read-Only User Directory</h3>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+        <input id="phase47UserSearch" placeholder="Search name or email" style="padding:10px;border:1px solid #ddd;border-radius:8px;flex:1;min-width:180px">
+        <select id="phase47UserRole" style="padding:10px;border:1px solid #ddd;border-radius:8px">
+          <option value="">All Roles</option>
+          <option value="provider">Provider</option>
+          <option value="receiver">Receiver</option>
+        </select>
+        <button class="btn" onclick="loadPhase47Users()">🔎 Search Users</button>
+      </div>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Created</th></tr></thead>
+          <tbody id="phase47Users"><tr><td colspan="5">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+<script>
+function esc(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+function card(label,value){return `<div class="card"><div class="label">${label}</div><div class="value">${esc(value)}</div></div>`;}
+
+function showMsg(text, ok=true){
+  const msg=document.getElementById('msg');
+  msg.textContent=text;
+  msg.style.display='block';
+  msg.style.background=ok?'#e6f6e8':'#fde8e8';
+  msg.style.color=ok?'#176b2f':'#a12626';
+}
+
+function clearDates(){
+  document.getElementById('startDate').value='';
+  document.getElementById('endDate').value='';
+  loadTrends();
+}
+
+async function loadDashboard(){
+  try{
+    const r=await fetch('/api/admin/dashboard',{cache:'no-store'});
+    const d=await r.json();
+    if(!r.ok||!d.success) throw new Error(d.message||'Failed');
+    const f=d.food,u=d.users,q=d.requests,n=d.notifications;
+    document.getElementById('metrics').innerHTML=[
+      card('🍱 Total Food',f.total),card('📍 Available Food',f.available),
+      card('🤝 Food Rescued',f.collected),card('🚨 Rescue Queue',f.rescue),
+      card('🔴 Critical Food',f.critical),card('📦 Total Requests',q.total),
+      card('⏳ Pending Requests',q.pending),card('✅ Collected Requests',q.collected),
+      card('📈 Collection Success',q.success_rate+'%'),card('🏢 Providers',u.providers),
+      card('🏠 Receivers',u.receivers),card('🔔 AI Notifications',n.ai)
+    ].join('');
+
+    document.getElementById('foodImpact').innerHTML=
+      `<div class="item">🍽️ Estimated meals/plates redistributed: <b>${esc(f.meals_estimated)}</b></div>
+       <div class="item">♻️ Food rescued: <b>${esc(f.collected)}</b> listing(s)</div>
+       <div class="item">⛔ Expired listings: <b>${esc(f.expired)}</b></div>`;
+
+    document.getElementById('network').innerHTML=
+      `<div class="item">👥 Total users: <b>${esc(u.total)}</b></div>
+       <div class="item">🏢 Providers: <b>${esc(u.providers)}</b></div>
+       <div class="item">🏠 Receivers: <b>${esc(u.receivers)}</b></div>
+       <div class="item">📡 Active receiver locations: <b>${esc(d.receiver_locations)}</b></div>`;
+
+    const maxType=Math.max(1,...f.by_type.map(x=>x.value));
+    document.getElementById('types').innerHTML=f.by_type.length
+      ?f.by_type.map(x=>`<div class="barrow"><div class="barhead"><span>${esc(x.label)}</span><span>${x.value}</span></div><div class="bar"><div class="fill" style="width:${Math.round(x.value/maxType*100)}%"></div></div></div>`).join('')
+      :'<span class="muted">No data</span>';
+
+    const maxMonth=Math.max(1,...f.monthly.map(x=>x.value));
+    document.getElementById('monthly').innerHTML=f.monthly.length
+      ?f.monthly.map(x=>`<div class="barrow"><div class="barhead"><span>${esc(x.month)}</span><span>${x.value}</span></div><div class="bar"><div class="fill" style="width:${Math.round(x.value/maxMonth*100)}%"></div></div></div>`).join('')
+      :'<span class="muted">No date data</span>';
+
+    document.getElementById('rescue').innerHTML=f.rescue_queue.length
+      ?f.rescue_queue.map(x=>`<div class="item ${x.urgency==='critical'?'danger':x.urgency==='urgent'?'warn':''}"><span class="pill">${esc(x.urgency.toUpperCase())}</span> <b>${esc(x.food_name)}</b><br>Quantity: ${esc(x.quantity)} &nbsp;|&nbsp; ${esc(x.hours_remaining)} hour(s) remaining</div>`).join('')
+      :'<div class="item">🟢 No food is currently in the rescue window.</div>';
+
+    document.getElementById('requests').innerHTML=q.recent.length
+      ?q.recent.map(x=>`<div class="item"><b>${esc(x.receiver)}</b> — <span class="status">${esc(x.status).toUpperCase()}</span><br>${esc(x.food)} <span class="muted">${esc(x.requested_at)}</span></div>`).join('')
+      :'<div class="item">No requests.</div>';
+
+    document.getElementById('notifications').innerHTML=
+      `<div class="item">🔔 Total notifications: <b>${n.total}</b></div>
+       <div class="item">🟢 Unread notifications: <b>${n.unread}</b></div>
+       <div class="item">🤖 AI notifications: <b>${n.ai}</b></div>`;
+
+    document.getElementById('users').innerHTML=u.recent.length
+      ?u.recent.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.email)}</td><td>${esc(x.role)}</td><td>${esc(x.created_at)}</td></tr>`).join('')
+      :'<tr><td colspan="4">No users.</td></tr>';
+
+    showMsg('✅ Admin analytics updated successfully.');
+  }catch(e){showMsg('❌ '+e.message,false);}
+}
+
+function drawLineChart(canvasId, labels, series, options={}){
+  const canvas=document.getElementById(canvasId);
+  if(!canvas) return;
+  const dpr=window.devicePixelRatio||1;
+  const rect=canvas.getBoundingClientRect();
+  const w=Math.max(300,rect.width), h=Math.max(220,rect.height);
+  canvas.width=w*dpr; canvas.height=h*dpr;
+  const ctx=canvas.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,w,h);
+
+  const pad={l:42,r:18,t:24,b:42};
+  const pw=w-pad.l-pad.r, ph=h-pad.t-pad.b;
+  const all=(series||[]).flatMap(s=>s.data||[]);
+  const max=Math.max(1,...all);
+  const n=Math.max(1,labels.length);
+
+  ctx.font='12px Arial';
+  ctx.strokeStyle='#e2e8e3';
+  ctx.fillStyle='#68736c';
+  ctx.lineWidth=1;
+
+  for(let i=0;i<=4;i++){
+    const y=pad.t+ph-(ph*i/4);
+    ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+pw,y);ctx.stroke();
+    const val=Math.round(max*i/4);
+    ctx.fillText(String(val),4,y+4);
+  }
+
+  const step=n===1?0:pw/(n-1);
+  labels.forEach((lab,i)=>{
+    if(n<=7 || i===0 || i===n-1 || i%Math.ceil(n/7)===0){
+      const x=pad.l+step*i;
+      ctx.save();ctx.translate(x,h-12);ctx.rotate(-0.35);ctx.fillText(lab,-14,0);ctx.restore();
+    }
+  });
+
+  series.forEach(s=>{
+    ctx.strokeStyle=s.color;ctx.lineWidth=3;ctx.beginPath();
+    s.data.forEach((v,i)=>{
+      const x=pad.l+(n===1?pw/2:step*i);
+      const y=pad.t+ph-(Number(v||0)/max)*ph;
+      if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+    });
+    ctx.stroke();
+
+    ctx.fillStyle=s.color;
+    s.data.forEach((v,i)=>{
+      const x=pad.l+(n===1?pw/2:step*i);
+      const y=pad.t+ph-(Number(v||0)/max)*ph;
+      ctx.beginPath();ctx.arc(x,y,3.5,0,Math.PI*2);ctx.fill();
+    });
+  });
+}
+
+function drawBarChart(canvasId, labels, series, options={}){
+  const canvas=document.getElementById(canvasId);
+  if(!canvas) return;
+  const dpr=window.devicePixelRatio||1, rect=canvas.getBoundingClientRect();
+  const w=Math.max(300,rect.width),h=Math.max(220,rect.height);
+  canvas.width=w*dpr;canvas.height=h*dpr;
+  const ctx=canvas.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+  const pad={l:42,r:18,t:24,b:42}, pw=w-pad.l-pad.r,ph=h-pad.t-pad.b;
+  const all=(series||[]).flatMap(s=>s.data||[]), max=Math.max(1,...all), n=Math.max(1,labels.length);
+  const groupW=pw/n, barW=Math.max(3,Math.min(18,groupW/(series.length+1)));
+
+  ctx.font='12px Arial';ctx.strokeStyle='#e2e8e3';ctx.fillStyle='#68736c';ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){
+    const y=pad.t+ph-(ph*i/4);ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+pw,y);ctx.stroke();
+    ctx.fillText(String(Math.round(max*i/4)),4,y+4);
+  }
+  labels.forEach((lab,i)=>{
+    if(n<=7 || i===0 || i===n-1 || i%Math.ceil(n/7)===0){
+      const x=pad.l+groupW*i+groupW/2;ctx.save();ctx.translate(x,h-12);ctx.rotate(-0.35);ctx.fillText(lab,-14,0);ctx.restore();
+    }
+  });
+  series.forEach((s,si)=>{
+    ctx.fillStyle=s.color;
+    s.data.forEach((v,i)=>{
+      const x=pad.l+groupW*i+groupW/2-(series.length*barW/2)+(si*barW);
+      const bh=(Number(v||0)/max)*ph,y=pad.t+ph-bh;
+      ctx.fillRect(x,y,Math.max(2,barW-2),bh);
+    });
+  });
+}
+
+function drawDonut(canvasId, items){
+  const canvas=document.getElementById(canvasId);
+  if(!canvas)return;
+  const dpr=window.devicePixelRatio||1,rect=canvas.getBoundingClientRect();
+  const w=Math.max(240,rect.width),h=Math.max(240,rect.height);
+  canvas.width=w*dpr;canvas.height=h*dpr;
+  const ctx=canvas.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+  const total=items.reduce((a,x)=>a+Number(x.value||0),0);
+  if(!total){ctx.fillStyle='#68736c';ctx.font='14px Arial';ctx.fillText('No data',w/2-25,h/2);return;}
+  const colors=['#2c8a3c','#6b8fd6','#e5a400','#d33','#7b5cc7','#1f9d9a','#d66b6b','#777'];
+  const cx=w/2,cy=h/2,r=Math.min(w,h)*.34,inner=r*.58;
+  let angle=-Math.PI/2;
+  items.forEach((item,i)=>{
+    const slice=(Number(item.value||0)/total)*Math.PI*2;
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,angle,angle+slice);ctx.closePath();
+    ctx.fillStyle=colors[i%colors.length];ctx.fill();angle+=slice;
+  });
+  ctx.beginPath();ctx.arc(cx,cy,inner,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();
+  ctx.fillStyle='#176b2f';ctx.font='bold 22px Arial';ctx.textAlign='center';ctx.fillText(String(total),cx,cy+7);
+  ctx.font='12px Arial';ctx.fillStyle='#68736c';ctx.fillText('food listings',cx,cy+25);ctx.textAlign='left';
+}
+
+async function loadTrends(){
+  const start=document.getElementById('startDate').value;
+  const end=document.getElementById('endDate').value;
+  const qs=new URLSearchParams();
+  if(start)qs.set('start_date',start);
+  if(end)qs.set('end_date',end);
+  try{
+    const r=await fetch('/api/admin/trends?'+qs.toString(),{cache:'no-store'});
+    const d=await r.json();
+    if(!r.ok||!d.success)throw new Error(d.message||'Failed to load trends');
+
+    document.getElementById('trendRange').textContent=`Trend range: ${d.range.start} → ${d.range.end}`;
+    const k=d.kpis;
+    document.getElementById('trendKpis').innerHTML=
+      `<div class="trend-kpi">🍱 Posted<b>${k.posted}</b></div>
+       <div class="trend-kpi">♻️ Rescued<b>${k.rescued}</b></div>
+       <div class="trend-kpi">📈 Rescue Rate<b>${k.rescue_rate}%</b></div>
+       <div class="trend-kpi">📦 Requests<b>${k.requests}</b></div>`;
+
+    drawLineChart('foodTrendChart',d.labels,[
+      {data:d.food.posted,color:'#2c8a3c'},
+      {data:d.food.rescued,color:'#176b2f'},
+      {data:d.food.expired,color:'#d33'}
+    ]);
+
+    drawBarChart('requestTrendChart',d.labels,[
+      {data:d.requests.total,color:'#6b8fd6'},
+      {data:d.requests.collected,color:'#2c8a3c'},
+      {data:d.requests.pending,color:'#e5a400'}
+    ]);
+
+    drawLineChart('userTrendChart',d.labels,[
+      {data:d.users.registered,color:'#7b5cc7'}
+    ]);
+
+    drawLineChart('notificationTrendChart',d.labels,[
+      {data:d.notifications.total,color:'#6b8fd6'},
+      {data:d.notifications.ai,color:'#2c8a3c'}
+    ]);
+
+    showMsg('✅ Advanced trends updated successfully.');
+  }catch(e){showMsg('❌ '+e.message,false);}
+}
+
+window.addEventListener('resize',()=>{if(window.__trendData){renderTrendCharts(window.__trendData);}});
+
+// Keep the selected trend data in memory so charts redraw cleanly on resize.
+function renderTrendCharts(d){
+  drawLineChart('foodTrendChart',d.labels,[
+    {data:d.food.posted,color:'#2c8a3c'},
+    {data:d.food.rescued,color:'#176b2f'},
+    {data:d.food.expired,color:'#d33'}
+  ]);
+  drawBarChart('requestTrendChart',d.labels,[
+    {data:d.requests.total,color:'#6b8fd6'},
+    {data:d.requests.collected,color:'#2c8a3c'},
+    {data:d.requests.pending,color:'#e5a400'}
+  ]);
+  drawLineChart('userTrendChart',d.labels,[{data:d.users.registered,color:'#7b5cc7'}]);
+  drawLineChart('notificationTrendChart',d.labels,[
+    {data:d.notifications.total,color:'#6b8fd6'},
+    {data:d.notifications.ai,color:'#2c8a3c'}
+  ]);
+}
+
+const originalLoadTrends=loadTrends;
+loadTrends=async function(){
+  const start=document.getElementById('startDate').value;
+  const end=document.getElementById('endDate').value;
+  const qs=new URLSearchParams();
+  if(start)qs.set('start_date',start);
+  if(end)qs.set('end_date',end);
+  try{
+    const r=await fetch('/api/admin/trends?'+qs.toString(),{cache:'no-store'});
+    const d=await r.json();
+    if(!r.ok||!d.success)throw new Error(d.message||'Failed to load trends');
+    window.__trendData=d;
+    document.getElementById('trendRange').textContent=`Trend range: ${d.range.start} → ${d.range.end}`;
+    const k=d.kpis;
+    document.getElementById('trendKpis').innerHTML=
+      `<div class="trend-kpi">🍱 Posted<b>${k.posted}</b></div>
+       <div class="trend-kpi">♻️ Rescued<b>${k.rescued}</b></div>
+       <div class="trend-kpi">📈 Rescue Rate<b>${k.rescue_rate}%</b></div>
+       <div class="trend-kpi">📦 Requests<b>${k.requests}</b></div>`;
+    renderTrendCharts(d);
+    showMsg('✅ Advanced trends updated successfully.');
+  }catch(e){showMsg('❌ '+e.message,false);}
+};
+
+
+function showLocationMsg(text, ok=true){
+  const el=document.getElementById('locationMsg');
+  if(!el)return;
+  el.textContent=text;el.style.display='block';
+  el.style.background=ok?'#e6f6e8':'#fde8e8';
+  el.style.color=ok?'#176b2f':'#a12626';
+}
+
+function drawLocationMap(data){
+  const canvas=document.getElementById('locationMap');
+  if(!canvas)return;
+  const dpr=window.devicePixelRatio||1, rect=canvas.getBoundingClientRect();
+  const w=Math.max(320,rect.width),h=Math.max(260,rect.height);
+  canvas.width=w*dpr;canvas.height=h*dpr;
+  const ctx=canvas.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+  const points=[...(data.food_points||[]),...(data.receiver_points||[])];
+  if(!points.length){ctx.fillStyle='#68736c';ctx.font='15px Arial';ctx.fillText('No GPS location data available.',20,30);return;}
+  const lats=points.map(p=>Number(p.latitude)), lons=points.map(p=>Number(p.longitude));
+  let minLat=Math.min(...lats),maxLat=Math.max(...lats),minLon=Math.min(...lons),maxLon=Math.max(...lons);
+  if(Math.abs(maxLat-minLat)<0.002){minLat-=0.001;maxLat+=0.001;}
+  if(Math.abs(maxLon-minLon)<0.002){minLon-=0.001;maxLon+=0.001;}
+  const pad=35;
+  const x=lon=>pad+((lon-minLon)/(maxLon-minLon))*Math.max(1,w-2*pad);
+  const y=lat=>h-pad-((lat-minLat)/(maxLat-minLat))*Math.max(1,h-2*pad);
+  ctx.strokeStyle='#dfe8e1';ctx.lineWidth=1;
+  for(let i=0;i<5;i++){const gx=pad+i*(w-2*pad)/4,gy=pad+i*(h-2*pad)/4;ctx.beginPath();ctx.moveTo(gx,pad);ctx.lineTo(gx,h-pad);ctx.stroke();ctx.beginPath();ctx.moveTo(pad,gy);ctx.lineTo(w-pad,gy);ctx.stroke();}
+  (data.food_points||[]).forEach(p=>{
+    const px=x(Number(p.longitude)),py=y(Number(p.latitude));
+    const status=p.status||'available';
+    ctx.fillStyle=status==='rescued'?'#176b2f':status==='expired'?'#d33':'#2c8a3c';
+    ctx.beginPath();ctx.arc(px,py,5,0,Math.PI*2);ctx.fill();
+  });
+  (data.receiver_points||[]).forEach(p=>{
+    const px=x(Number(p.longitude)),py=y(Number(p.latitude));
+    ctx.fillStyle='#6b8fd6';ctx.beginPath();ctx.arc(px,py,6,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
+  });
+  ctx.fillStyle='#68736c';ctx.font='11px Arial';ctx.fillText('GPS coverage view',pad,18);
+}
+
+async function loadLocationAnalytics(){
+  try{
+    const start=document.getElementById('startDate').value;
+    const end=document.getElementById('endDate').value;
+    const qs=new URLSearchParams();if(start)qs.set('start_date',start);if(end)qs.set('end_date',end);qs.set('top_n','12');
+    const r=await fetch('/api/admin/location-analytics?'+qs.toString(),{cache:'no-store'});
+    const d=await r.json();
+    if(!r.ok||!d.success)throw new Error(d.message||'Failed to load location analytics');
+    window.__locationData=d;
+    const s=d.summary||{};
+    document.getElementById('locationKpis').innerHTML=[
+      ['📍 Areas',s.areas||0],['🍱 Geo-tagged Food',s.geo_tagged_food||0],['🏠 Receivers',s.receiver_locations||0],
+      ['📏 Avg Nearest Receiver',String(s.avg_nearest_receiver_km||0)+' km'],['🎯 Within 10 km',String(s.coverage_rate_10km||0)+'%']
+    ].map(x=>`<div class="location-kpi"><div class="label">${esc(x[0])}</div><b>${esc(x[1])}</b></div>`).join('');
+
+    const cov=d.coverage||[];const maxCov=Math.max(1,...cov.map(x=>Number(x.value||0)));
+    document.getElementById('coverageBars').innerHTML=cov.length?cov.map(x=>`<div class="barrow"><div class="barhead"><span>${esc(x.label)}</span><span>${esc(x.value)}</span></div><div class="bar"><div class="fill" style="width:${Math.round(Number(x.value||0)/maxCov*100)}%"></div></div></div>`).join(''):'<div class="empty">No coverage data.</div>';
+
+    document.getElementById('areaRows').innerHTML=(d.areas||[]).length?(d.areas||[]).map(x=>`<tr><td><b>${esc(x.area)}</b></td><td>${esc(x.food_listings)}</td><td>${esc(x.available)}</td><td>${esc(x.rescued)}</td><td>${esc(x.rescue_rate)}%</td></tr>`).join(''):'<tr><td colspan="5">No area data.</td></tr>';
+
+    const maxP=Math.max(1,...(d.providers||[]).map(x=>Number(x.food_listings||0)));
+    document.getElementById('providerAreas').innerHTML=(d.providers||[]).length?(d.providers||[]).map(x=>`<div class="barrow"><div class="barhead"><span>${esc(x.provider)}</span><span>${esc(x.food_listings)} food</span></div><div class="bar"><div class="fill" style="width:${Math.round(Number(x.food_listings||0)/maxP*100)}%"></div></div><div class="muted">Available: ${esc(x.available)} · Rescued: ${esc(x.rescued)}</div></div>`).join(''):'<div class="empty">No provider data.</div>';
+    drawLocationMap(d);
+    showLocationMsg('✅ Phase 4.3 location analytics updated successfully.');
+  }catch(e){showLocationMsg('❌ '+e.message,false);}
+}
+
+window.addEventListener('resize',()=>{if(window.__locationData)drawLocationMap(window.__locationData);});
+
+
+async function loadPerformanceAnalytics(){
+  try{
+    const start=document.getElementById('startDate').value;
+    const end=document.getElementById('endDate').value;
+    const qs=new URLSearchParams();
+    if(start)qs.set('start_date',start); if(end)qs.set('end_date',end); qs.set('top_n','20');
+    const r=await fetch('/api/admin/performance?'+qs.toString(),{cache:'no-store'});
+    const d=await r.json();
+    if(!r.ok||!d.success) throw new Error(d.message||'Failed to load performance analytics');
+    const s=d.summary||{};
+    document.getElementById('performanceKpis').innerHTML=[
+      ['🏢 Providers',s.providers||0],['🏠 Receivers',s.receivers||0],['🍱 Food Listings',s.food_listings||0],
+      ['♻️ Rescued Food',s.rescued_food||0],['📦 Requests',s.requests||0],['📈 Collection Rate',String(s.overall_collection_rate||0)+'%'],
+      ['🥇 Top Provider',s.top_provider||'—'],['🏆 Top Receiver',s.top_receiver||'—']
+    ].map(x=>`<div class="card"><div class="label">${esc(x[0])}</div><div class="value">${esc(x[1])}</div></div>`).join('');
+    document.getElementById('providerPerformanceRows').innerHTML=(d.providers||[]).length?(d.providers||[]).map(x=>`<tr><td><b>${esc(x.provider)}</b><br><span class="muted">${esc(x.email||'')}</span></td><td>${esc(x.food_listings)}</td><td>${esc(x.rescued)}</td><td>${esc(x.requests)}</td><td>${esc(x.collected_requests)}</td><td>${esc(x.rescue_rate)}%</td><td>${esc(x.request_conversion)}%</td><td><b>${esc(x.performance_score)}</b>/100</td></tr>`).join(''):'<tr><td colspan="8">No provider performance data.</td></tr>';
+    document.getElementById('receiverPerformanceRows').innerHTML=(d.receivers||[]).length?(d.receivers||[]).map(x=>`<tr><td><b>${esc(x.receiver)}</b><br><span class="muted">${esc(x.email||'')}</span></td><td>${esc(x.requests)}</td><td>${esc(x.accepted)}</td><td>${esc(x.collected)}</td><td>${esc(x.rejected)}</td><td>${esc(x.success_rate)}%</td><td>${x.active_location?'🟢 Active':'⚪ Stale/None'}</td><td><b>${esc(x.performance_score)}</b>/100</td></tr>`).join(''):'<tr><td colspan="8">No receiver performance data.</td></tr>';
+    const msg=document.getElementById('performanceMsg'); msg.textContent='✅ Provider and receiver performance updated successfully.'; msg.style.display='block'; msg.style.background='#e6f6e8'; msg.style.color='#176b2f';
+  }catch(e){const msg=document.getElementById('performanceMsg');msg.textContent='❌ '+e.message;msg.style.display='block';msg.style.background='#fde8e8';msg.style.color='#a12626';}
+}
+
+
+function setRangeMessage(text, ok=true){
+  const msg=document.getElementById('rangeMsg');
+  msg.textContent=text;
+  msg.style.display='block';
+  msg.style.background=ok?'#e6f6e8':'#fde8e8';
+  msg.style.color=ok?'#176b2f':'#a12626';
+}
+
+function formatChange(value){
+  const n=Number(value||0);
+  return (n>0?'+':'')+n.toFixed(1)+'%';
+}
+
+function applyReportPreset(){
+  const preset=document.getElementById('reportPreset').value;
+  const start=document.getElementById('rangeStartDate');
+  const end=document.getElementById('rangeEndDate');
+  const custom=preset==='custom';
+  start.disabled=!custom;
+  end.disabled=!custom;
+  if(!custom){start.value='';end.value='';}
+}
+
+async function loadDateRangeReport(){
+  try{
+    const preset=document.getElementById('reportPreset').value;
+    const start=document.getElementById('rangeStartDate').value;
+    const end=document.getElementById('rangeEndDate').value;
+    const compare=document.getElementById('comparePrevious').checked;
+    if(preset==='custom' && (!start || !end)) throw new Error('Select both start and end dates for a custom range.');
+    if(preset==='custom' && start>end) throw new Error('Start date cannot be after end date.');
+
+    const qs=new URLSearchParams();
+    if(preset && preset!=='custom') qs.set('preset',preset);
+    if(start) qs.set('start_date',start);
+    if(end) qs.set('end_date',end);
+    qs.set('compare',compare?'true':'false');
+    qs.set('top_n','20');
+
+    const r=await fetch('/api/admin/date-range-report?'+qs.toString(),{cache:'no-store'});
+    const d=await r.json();
+    if(!r.ok || !d.success) throw new Error(d.message||'Failed to generate date-range report');
+
+    const s=d.summary||{};
+    const c=d.comparison||{};
+    const p=d.previous_summary||{};
+    const range=d.range||{};
+
+    document.getElementById('rangeKpis').innerHTML=[
+      ['📅 Report Period',range.label||'—'],
+      ['🍱 Food Posted',s.food_listings||0],
+      ['♻️ Food Rescued',s.food_rescued||0],
+      ['📦 Requests',s.requests||0],
+      ['✅ Collected',s.collected_requests||0],
+      ['📈 Collection Rate',String(s.collection_rate||0)+'%'],
+      ['👥 New Users',s.new_users||0],
+      ['🔔 AI Notifications',s.ai_notifications||0]
+    ].map(x=>`<div class="card"><div class="label">${esc(x[0])}</div><div class="value">${esc(x[1])}</div></div>`).join('');
+
+    document.getElementById('rangeCurrent').innerHTML=[
+      ['🍱 Food listings',s.food_listings],['♻️ Food rescued',s.food_rescued],
+      ['⛔ Food expired',s.food_expired],['📍 Food available',s.food_available],
+      ['📦 Requests',s.requests],['🤝 Accepted requests',s.accepted_requests],
+      ['❌ Rejected requests',s.rejected_requests],['⏳ Pending requests',s.pending_requests],
+      ['📈 Rescue rate',String(s.rescue_rate)+'%'],['📈 Collection rate',String(s.collection_rate)+'%'],
+      ['🍽️ Quantity posted',s.quantity_posted],['🍽️ Quantity rescued',s.quantity_rescued]
+    ].map(x=>`<div class="item"><b>${esc(x[0])}</b><br>${esc(x[1])}</div>`).join('');
+
+    if(compare && d.previous_summary){
+      const labels={
+        food_listings:'Food listings',food_rescued:'Food rescued',food_expired:'Food expired',
+        requests:'Requests',collected_requests:'Collected requests',new_users:'New users',
+        ai_notifications:'AI notifications',quantity_rescued:'Quantity rescued',
+        collection_rate:'Collection rate',rescue_rate:'Rescue rate'
+      };
+      document.getElementById('rangeComparison').innerHTML=Object.keys(labels).map(k=>{
+        const x=c[k]||{};
+        return `<div class="item"><b>${esc(labels[k])}</b><br>Current: ${esc(x.current??0)} · Previous: ${esc(x.previous??0)} · Change: <b>${esc(formatChange(x.change_percent))}</b></div>`;
+      }).join('')+`<div class="info-note">Previous period: ${esc((d.previous_range||{}).start||'—')} → ${esc((d.previous_range||{}).end||'—')}</div>`;
+    }else{
+      document.getElementById('rangeComparison').innerHTML='<div class="item">Comparison is disabled for this report.</div>';
+    }
+
+    const daily=d.daily||[];
+    document.getElementById('rangeDailyRows').innerHTML=daily.length
+      ? daily.map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.posted)}</td><td>${esc(x.rescued)}</td><td>${esc(x.requests)}</td><td>${esc(x.collected)}</td></tr>`).join('')
+      : '<tr><td colspan="5">Daily rows are available for ranges up to 366 days.</td></tr>';
+
+    const providers=((d.performance||{}).providers)||[];
+    document.getElementById('rangeProviderRows').innerHTML=providers.length
+      ? providers.slice(0,10).map(x=>`<tr><td><b>${esc(x.provider)}</b><br><span class="muted">${esc(x.email||'')}</span></td><td>${esc(x.food_listings)}</td><td>${esc(x.rescued)}</td><td>${esc(x.requests)}</td><td>${esc(x.collected_requests)}</td><td><b>${esc(x.performance_score)}</b>/100</td></tr>`).join('')
+      : '<tr><td colspan="6">No provider data for this period.</td></tr>';
+
+    const receivers=((d.performance||{}).receivers)||[];
+    document.getElementById('rangeReceiverRows').innerHTML=receivers.length
+      ? receivers.slice(0,10).map(x=>`<tr><td><b>${esc(x.receiver)}</b><br><span class="muted">${esc(x.email||'')}</span></td><td>${esc(x.requests)}</td><td>${esc(x.accepted)}</td><td>${esc(x.collected)}</td><td>${esc(x.success_rate)}%</td><td><b>${esc(x.performance_score)}</b>/100</td></tr>`).join('')
+      : '<tr><td colspan="6">No receiver data for this period.</td></tr>';
+
+    setRangeMessage('✅ Phase 4.6 date-range report generated successfully.');
+  }catch(e){setRangeMessage('❌ '+e.message,false);}
+}
+
+function downloadDateRangeReport(){
+  const preset=document.getElementById('reportPreset').value;
+  const start=document.getElementById('rangeStartDate').value;
+  const end=document.getElementById('rangeEndDate').value;
+  if(preset==='custom' && (!start || !end)){setRangeMessage('❌ Select both custom start and end dates before exporting.',false);return;}
+  if(preset==='custom' && start>end){setRangeMessage('❌ Start date cannot be after end date.',false);return;}
+  const qs=new URLSearchParams();
+  if(preset && preset!=='custom')qs.set('preset',preset);
+  if(start)qs.set('start_date',start);
+  if(end)qs.set('end_date',end);
+  window.location.href='/api/admin/export/date-range.csv?'+qs.toString();
+}
+
+applyReportPreset();
+loadDateRangeReport();
+
+loadDashboard();
+loadTrends();
+loadLocationAnalytics();
+loadPerformanceAnalytics();
+loadImpactReport();
+
+async function loadImpactReport(){
+  try{
+    const start=document.getElementById('startDate').value;
+    const end=document.getElementById('endDate').value;
+    const qs=new URLSearchParams();
+    if(start)qs.set('start_date',start);
+    if(end)qs.set('end_date',end);
+    qs.set('top_n','20');
+
+    const r=await fetch('/api/admin/report?'+qs.toString(),{cache:'no-store'});
+    const d=await r.json();
+    if(!r.ok||!d.success) throw new Error(d.message||'Failed to generate impact report');
+
+    const dash=d.dashboard||{};
+    const food=dash.food||{};
+    const req=dash.requests||{};
+    const users=dash.users||{};
+    const notif=dash.notifications||{};
+    const perf=(d.performance||{});
+    const ps=perf.summary||{};
+    const loc=(d.location||{}).summary||{};
+
+    document.getElementById('reportKpis').innerHTML=[
+      ['🍱 Food Listings',food.total||0],
+      ['♻️ Food Rescued',food.collected||0],
+      ['📦 Requests',req.total||0],
+      ['✅ Collection Rate',String(req.success_rate||0)+'%'],
+      ['🏢 Providers',users.providers||0],
+      ['🏠 Receivers',users.receivers||0],
+      ['🔔 AI Notifications',notif.ai||0],
+      ['📍 Geo-tagged Food',loc.geo_tagged_food||0]
+    ].map(x=>`<div class="card"><div class="label">${esc(x[0])}</div><div class="value">${esc(x[1])}</div></div>`).join('');
+
+    document.getElementById('reportImpact').innerHTML=[
+      ['♻️ Food rescued',food.collected||0],
+      ['🍽️ Estimated redistribution',food.meals_estimated??'—'],
+      ['⏳ Rescue queue',food.rescue||0],
+      ['🔴 Critical food',food.critical||0],
+      ['📈 Overall collection rate',String(ps.overall_collection_rate||req.success_rate||0)+'%']
+    ].map(x=>`<div class="item"><b>${esc(x[0])}</b><br>${esc(x[1])}</div>`).join('');
+
+    document.getElementById('reportNetwork').innerHTML=[
+      ['👥 Providers',users.providers||0],
+      ['🏠 Receivers',users.receivers||0],
+      ['📍 Receiver locations',loc.receiver_locations||0],
+      ['🗺️ Areas',loc.areas||0],
+      ['📏 Avg nearest receiver',String(loc.avg_nearest_receiver_km||0)+' km'],
+      ['🎯 Within 10 km',String(loc.coverage_rate_10km||0)+'%']
+    ].map(x=>`<div class="item"><b>${esc(x[0])}</b><br>${esc(x[1])}</div>`).join('');
+
+    const providers=perf.providers||[];
+    document.getElementById('reportProviders').innerHTML=providers.length
+      ? providers.slice(0,10).map(x=>`<tr>
+          <td><b>${esc(x.provider)}</b></td>
+          <td>${esc(x.food_listings)}</td>
+          <td>${esc(x.rescued)}</td>
+          <td>${esc(x.requests)}</td>
+          <td>${esc(x.collected_requests)}</td>
+          <td><b>${esc(x.performance_score)}</b>/100</td>
+        </tr>`).join('')
+      : '<tr><td colspan="6">No provider data.</td></tr>';
+
+    const receivers=perf.receivers||[];
+    document.getElementById('reportReceivers').innerHTML=receivers.length
+      ? receivers.slice(0,10).map(x=>`<tr>
+          <td><b>${esc(x.receiver)}</b></td>
+          <td>${esc(x.requests)}</td>
+          <td>${esc(x.accepted)}</td>
+          <td>${esc(x.collected)}</td>
+          <td>${esc(x.success_rate)}%</td>
+          <td><b>${esc(x.performance_score)}</b>/100</td>
+        </tr>`).join('')
+      : '<tr><td colspan="6">No receiver data.</td></tr>';
+
+    const msg=document.getElementById('reportMsg');
+    msg.textContent='✅ Phase 4.5 impact report generated successfully.';
+    msg.style.display='block';
+    msg.style.background='#e6f6e8';
+    msg.style.color='#176b2f';
+  }catch(e){
+    const msg=document.getElementById('reportMsg');
+    msg.textContent='❌ '+e.message;
+    msg.style.display='block';
+    msg.style.background='#fde8e8';
+    msg.style.color='#a12626';
+  }
+}
+
+function downloadAdminExport(path){
+  const start=document.getElementById('startDate').value;
+  const end=document.getElementById('endDate').value;
+  const qs=new URLSearchParams();
+  if(start)qs.set('start_date',start);
+  if(end)qs.set('end_date',end);
+  const url=path+(qs.toString()?('?'+qs.toString()):'');
+  window.location.href=url;
+}
+
+
+async function loadPhase47ControlCenter(){
+  const msg=document.getElementById('phase47Msg');
+  try{
+    const r=await fetch('/api/admin/control-center',{cache:'no-store'});
+    const d=await r.json();
+    if(!r.ok||!d.success) throw new Error(d.message||'Control center unavailable');
+    const i=d.impact||{}, sys=d.system||{}, q=d.quality||{};
+    document.getElementById('controlKpis').innerHTML=[
+      ['📊 Impact Index',i.impact_index??0],
+      ['🛡️ System Score',sys.system_score??0],
+      ['♻️ Food Rescued',i.food_rescued??0],
+      ['🍽️ Meals Rescued',i.estimated_meals_rescued??0],
+      ['📈 Rescue Rate',String(i.rescue_rate??0)+'%'],
+      ['📈 Collection Rate',String(i.collection_rate??0)+'%'],
+      ['👥 Providers',i.providers??0],
+      ['🏠 Receivers',i.receivers??0]
+    ].map(x=>`<div class="card"><div class="label">${esc(x[0])}</div><div class="value">${esc(x[1])}</div></div>`).join('');
+
+    document.getElementById('phase47System').innerHTML=[
+      ['Database',sys.database||'—'],
+      ['System score',sys.system_score??0],
+      ['Critical data issues',sys.data_quality_critical??0],
+      ['Warnings',sys.data_quality_warnings??0],
+      ['Users rows',sys.tables?.users??0],
+      ['Food rows',sys.tables?.food??0],
+      ['Request rows',sys.tables?.food_requests??0],
+      ['Notification rows',sys.tables?.notifications??0],
+      ['Receiver location rows',sys.tables?.receiver_locations??0]
+    ].map(x=>`<div class="item"><b>${esc(x[0])}</b><br>${esc(x[1])}</div>`).join('');
+
+    renderPhase47Quality(q);
+    const types=d.top_food_types||[];
+    document.getElementById('phase47FoodTypes').innerHTML=types.length
+      ? types.map(x=>`<div class="item"><b>${esc(x.food_type)}</b><br>${esc(x.count)} listing(s)</div>`).join('')
+      : '<div class="item">No food type data.</div>';
+    msg.textContent='✅ Phase 4.7 control center updated successfully.';
+    msg.style.display='block';msg.style.background='#e6f6e8';msg.style.color='#176b2f';
+  }catch(e){
+    msg.textContent='❌ '+e.message;msg.style.display='block';msg.style.background='#fde8e8';msg.style.color='#a12626';
+  }
+}
+
+function renderPhase47Quality(q){
+  const checks=q.checks||[];
+  document.getElementById('phase47Quality').innerHTML=checks.length
+    ? checks.map(x=>{
+        const good=(x.bad||0)===0;
+        const icon=good?'✅':(x.severity==='critical'?'🔴':'⚠️');
+        return `<div class="item"><b>${icon} ${esc(x.name)}</b><br>Issues: ${esc(x.bad||0)} / ${esc(x.total||0)}</div>`;
+      }).join('')
+    : '<div class="item">No quality checks available.</div>';
+}
+
+async function loadPhase47Quality(){
+  const msg=document.getElementById('phase47Msg');
+  try{
+    const r=await fetch('/api/admin/data-quality',{cache:'no-store'});
+    const d=await r.json();
+    if(!r.ok||!d.success) throw new Error(d.message||'Data quality audit failed');
+    renderPhase47Quality(d);
+    msg.textContent=`✅ Data quality audit complete — ${d.critical||0} critical issue(s), ${d.warnings||0} warning(s).`;
+    msg.style.display='block';msg.style.background='#e6f6e8';msg.style.color='#176b2f';
+  }catch(e){
+    msg.textContent='❌ '+e.message;msg.style.display='block';msg.style.background='#fde8e8';msg.style.color='#a12626';
+  }
+}
+
+async function loadPhase47Users(){
+  const body=document.getElementById('phase47Users');
+  try{
+    const qs=new URLSearchParams();
+    const search=document.getElementById('phase47UserSearch').value.trim();
+    const role=document.getElementById('phase47UserRole').value;
+    if(search)qs.set('search',search);
+    if(role)qs.set('role',role);
+    qs.set('limit','100');
+    const r=await fetch('/api/admin/users?'+qs.toString(),{cache:'no-store'});
+    const d=await r.json();
+    if(!r.ok||!d.success) throw new Error(d.message||'User directory failed');
+    const rows=d.users||[];
+    body.innerHTML=rows.length
+      ? rows.map(x=>`<tr><td>${esc(x.id)}</td><td><b>${esc(x.name)}</b></td><td>${esc(x.email)}</td><td>${esc(x.role)}</td><td>${esc(x.created_at)}</td></tr>`).join('')
+      : '<tr><td colspan="5">No users found.</td></tr>';
+  }catch(e){body.innerHTML=`<tr><td colspan="5">❌ ${esc(e.message)}</td></tr>`;}
+}
+
+loadPhase47ControlCenter();
+loadPhase47Users();
+
+</script>
+</body>
+</html>

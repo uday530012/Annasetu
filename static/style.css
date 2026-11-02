@@ -1,0 +1,1023 @@
+/* ==============================
+   FOODLOOP AI - PHASE 2
+   ============================== */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f8f6;
+    color: #1f2933;
+}
+
+
+/* ==============================
+   NAVBAR
+   ============================== */
+
+.navbar {
+    width: 100%;
+    padding: 20px 7%;
+    background: white;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border-bottom: 1px solid #e5ebe7;
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: #176b43;
+}
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+}
+
+.nav-links a:hover {
+    color: #1f8a55;
+}
+
+
+/* ==============================
+   HERO
+   ============================== */
+
+.hero {
+    min-height: 600px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 80px 20px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffffff 0%,
+            #f1f7f3 100%
+        );
+}
+
+.hero-content {
+    max-width: 850px;
+}
+
+.badge {
+    display: inline-block;
+
+    padding: 8px 16px;
+
+    border-radius: 30px;
+
+    background: #e0f3e8;
+
+    color: #176b43;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    margin: 0;
+
+    font-size: 64px;
+
+    line-height: 1.1;
+
+    letter-spacing: -2px;
+}
+
+.hero h1 span {
+    color: #1f8a55;
+}
+
+.hero p {
+    max-width: 700px;
+
+    margin: 25px auto;
+
+    font-size: 20px;
+
+    line-height: 1.7;
+
+    color: #59636b;
+}
+
+
+/* ==============================
+   HERO BUTTONS
+   ============================== */
+
+.hero-buttons {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 15px;
+
+    margin-top: 30px;
+}
+
+.primary-btn,
+.secondary-btn {
+    display: inline-block;
+
+    padding: 15px 28px;
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    font-weight: 700;
+
+    transition: 0.2s;
+}
+
+.primary-btn {
+    background: #1f8a55;
+
+    color: white;
+}
+
+.primary-btn:hover {
+    background: #176b43;
+
+    transform: translateY(-2px);
+}
+
+.secondary-btn {
+    background: white;
+
+    color: #1f8a55;
+
+    border: 1px solid #b9d8c5;
+}
+
+.secondary-btn:hover {
+    background: #edf7f1;
+}
+
+
+/* ==============================
+   SECTION HEADING
+   ============================== */
+
+.section-heading {
+    text-align: center;
+
+    max-width: 800px;
+
+    margin: auto;
+
+    padding: 20px;
+}
+
+.section-heading span {
+    font-size: 13px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    color: #1f8a55;
+}
+
+.section-heading h2 {
+    font-size: 40px;
+
+    margin: 12px 0;
+}
+
+.section-heading p {
+    color: #66736c;
+
+    font-size: 17px;
+}
+
+
+/* ==============================
+   ROLES
+   ============================== */
+
+.roles {
+    padding: 90px 7%;
+
+    background: #f5f8f6;
+}
+
+.role-container {
+    max-width: 1100px;
+
+    margin: 40px auto 0;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 25px;
+}
+
+.role-card {
+    background: white;
+
+    padding: 35px;
+
+    border-radius: 18px;
+
+    border: 1px solid #e1e9e4;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.06);
+
+    transition: 0.25s;
+}
+
+.role-card:hover {
+    transform: translateY(-6px);
+
+    box-shadow:
+        0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.role-icon {
+    width: 65px;
+
+    height: 65px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 15px;
+
+    background: #e7f5ed;
+
+    font-size: 32px;
+
+    margin-bottom: 20px;
+}
+
+.role-card h3 {
+    font-size: 23px;
+
+    margin: 0 0 15px;
+}
+
+.role-card p {
+    color: #66736c;
+
+    line-height: 1.6;
+
+    min-height: 80px;
+}
+
+.role-button {
+    display: inline-block;
+
+    margin-top: 15px;
+
+    padding: 12px 18px;
+
+    border-radius: 8px;
+
+    background: #1f8a55;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-weight: 700;
+}
+
+.role-button:hover {
+    background: #176b43;
+}
+
+
+/* ==============================
+   HOW IT WORKS
+   ============================== */
+
+.how-it-works {
+    padding: 90px 7%;
+
+    background: white;
+}
+
+.steps {
+    max-width: 1100px;
+
+    margin: 50px auto 0;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 25px;
+}
+
+.step {
+    text-align: center;
+
+    padding: 25px;
+}
+
+.step-number {
+    width: 60px;
+
+    height: 60px;
+
+    margin: 0 auto 20px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #1f8a55;
+
+    color: white;
+
+    font-weight: 800;
+
+    font-size: 16px;
+}
+
+.step h3 {
+    font-size: 20px;
+}
+
+.step p {
+    color: #66736c;
+
+    line-height: 1.6;
+}
+
+
+/* ==============================
+   IMPACT
+   ============================== */
+
+.impact {
+    padding: 90px 7%;
+
+    background: #edf6f1;
+}
+
+.impact-container {
+    max-width: 1000px;
+
+    margin: 45px auto 0;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 20px;
+}
+
+.impact-container div {
+    text-align: center;
+
+    background: white;
+
+    padding: 30px;
+
+    border-radius: 15px;
+}
+
+.impact-container strong {
+    display: block;
+
+    font-size: 42px;
+
+    color: #1f8a55;
+}
+
+.impact-container p {
+    margin-bottom: 0;
+
+    color: #66736c;
+
+    font-weight: 600;
+}
+
+
+/* ==============================
+   FOOTER
+   ============================== */
+
+footer {
+    text-align: center;
+
+    padding: 45px 20px;
+
+    background: #153d2b;
+
+    color: white;
+}
+
+footer h3 {
+    margin: 0 0 10px;
+
+    font-size: 22px;
+}
+
+footer p {
+    margin: 7px 0;
+
+    color: #d5e6dc;
+}
+
+
+/* ==============================
+   RESPONSIVE
+   ============================== */
+
+@media (max-width: 900px) {
+
+    .hero h1 {
+        font-size: 48px;
+    }
+
+    .role-container {
+        grid-template-columns: 1fr;
+    }
+
+    .steps {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .impact-container {
+        grid-template-columns: 1fr 1fr;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .navbar {
+        padding: 15px 20px;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .hero {
+        min-height: 500px;
+
+        padding: 60px 20px;
+    }
+
+    .hero h1 {
+        font-size: 40px;
+    }
+
+    .hero p {
+        font-size: 17px;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+        width: 100%;
+    }
+
+    .section-heading h2 {
+        font-size: 32px;
+    }
+
+    .steps {
+        grid-template-columns: 1fr;
+    }
+
+    .impact-container {
+        grid-template-columns: 1fr;
+    }
+
+}
+/* ==============================
+   PROVIDER FORM
+   ============================== */
+
+.provider-section {
+    padding: 80px 20px;
+
+    background: #f5f8f6;
+
+    min-height: 100vh;
+}
+
+.provider-container {
+    max-width: 700px;
+
+    margin: auto;
+
+    background: white;
+
+    padding: 45px;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 10px 35px rgba(0, 0, 0, 0.08);
+}
+
+.provider-heading {
+    text-align: center;
+
+    margin-bottom: 35px;
+}
+
+.provider-heading span {
+    color: #1f8a55;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+.provider-heading h1 {
+    font-size: 40px;
+
+    margin: 12px 0;
+}
+
+.provider-heading p {
+    color: #66736c;
+
+    font-size: 17px;
+}
+
+
+/* FORM */
+
+.food-form {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+.food-form label {
+    margin-top: 12px;
+
+    font-weight: 700;
+
+    color: #26352d;
+}
+
+.food-form input,
+.food-form select {
+    width: 100%;
+
+    padding: 14px 15px;
+
+    border: 1px solid #d5e1da;
+
+    border-radius: 9px;
+
+    font-size: 16px;
+
+    background: white;
+
+    outline: none;
+}
+
+.food-form input:focus,
+.food-form select:focus {
+    border-color: #1f8a55;
+
+    box-shadow:
+        0 0 0 3px rgba(31, 138, 85, 0.1);
+}
+
+.submit-food {
+    margin-top: 25px;
+
+    padding: 16px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #1f8a55;
+
+    color: white;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.submit-food:hover {
+    background: #176b43;
+}
+/* Food Form */
+
+.form-section {
+    max-width: 650px;
+    margin: 60px auto;
+    padding: 40px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.form-section h2 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.form-section p {
+    color: #66736c;
+    margin-bottom: 30px;
+}
+
+form select {
+    padding: 14px;
+    border: 1px solid #d8e0db;
+    border-radius: 8px;
+    font-size: 15px;
+    background: white;
+}
+
+.form-section button {
+    background: #1f7a4d;
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.form-section button:hover {
+    background: #17633e;
+}
+/* -----------------------------------
+   RECEIVER FOOD PAGE
+----------------------------------- */
+
+.food-container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 20px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 25px;
+}
+
+
+.food-container .card {
+    background: white;
+
+    padding: 30px;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+
+.food-container .card h2 {
+    color: #1f7a4d;
+
+    margin-bottom: 20px;
+}
+
+
+.food-container .card p {
+    line-height: 1.6;
+
+    color: #555;
+}
+
+
+.status {
+    color: #1f7a4d;
+
+    font-weight: bold;
+}
+
+
+.food-container button {
+    width: 100%;
+
+    margin-top: 15px;
+
+    padding: 14px;
+
+    background: #1f7a4d;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 16px;
+
+    cursor: pointer;
+}
+
+
+.food-container button:hover {
+    background: #155c39;
+}
+
+
+/* Mobile */
+
+@media (max-width: 800px) {
+
+    .food-container {
+        grid-template-columns: 1fr 1fr;
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .food-container {
+        grid-template-columns: 1fr;
+    }
+
+}
+/* ============================= */
+/* RECEIVER PAGE */
+/* ============================= */
+
+.receiver-hero {
+    text-align: center;
+    padding: 90px 20px 60px;
+    background: #f1f8f4;
+}
+
+.section-label {
+    color: #198754;
+    font-weight: 700;
+    letter-spacing: 3px;
+    font-size: 14px;
+}
+
+.receiver-hero h1 {
+    font-size: 48px;
+    margin: 15px 0;
+    color: #1f2937;
+}
+
+.receiver-hero p {
+    color: #66736d;
+    font-size: 20px;
+}
+
+
+.food-section {
+    padding: 60px 8%;
+    background: #ffffff;
+}
+
+.food-container {
+    max-width: 1200px;
+    margin: auto;
+}
+
+
+.food-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+
+.food-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e7eee9;
+}
+
+
+.food-icon {
+    width: 60px;
+    height: 60px;
+    background: #e6f5ed;
+    border-radius: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 30px;
+}
+
+
+.food-card h2 {
+    color: #1f2937;
+    margin: 20px 0;
+}
+
+
+.food-details p {
+    color: #65736c;
+    margin: 10px 0;
+}
+
+
+.food-details strong {
+    color: #27332d;
+}
+
+
+.food-status {
+    margin-top: 20px;
+    padding: 10px 15px;
+
+    background: #e8f7ee;
+    color: #198754;
+
+    border-radius: 10px;
+
+    display: inline-block;
+    font-weight: 600;
+}
+
+
+.collect-button {
+    display: block;
+
+    margin-top: 20px;
+
+    background: #198754;
+    color: white;
+
+    text-decoration: none;
+
+    text-align: center;
+
+    padding: 14px;
+
+    border-radius: 10px;
+
+    font-weight: 700;
+}
+
+
+.collect-button:hover {
+    background: #146c43;
+}
+
+
+.no-food {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+
+.no-food-icon {
+    font-size: 60px;
+}
+
+
+.no-food h2 {
+    color: #1f2937;
+}
+
+
+.no-food p {
+    color: #68756f;
+}
+
+
+@media (max-width: 900px) {
+
+    .food-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .food-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .receiver-hero h1 {
+        font-size: 36px;
+    }
+
+}
+.map-section {
+    background: white;
+    padding: 24px;
+    border-radius: 18px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.section-header h2 {
+    margin: 0;
+}
+
+.section-header p {
+    margin: 5px 0 0;
+    color: #777;
+}
+
+.location-btn {
+    border: none;
+    background: #198754;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.location-btn:hover {
+    background: #146c43;
+}
+
+#foodMap {
+    width: 100%;
+    height: 450px;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+@media (max-width: 700px) {
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    #foodMap {
+        height: 350px;
+    }
+}

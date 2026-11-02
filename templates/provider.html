@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FoodLoop AI - Provider Dashboard</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7f6;
+            color: #222;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        header {
+            background: #1b5e20;
+            color: white;
+            padding: 18px 25px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 25px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logout-btn {
+            background: #d32f2f;
+            color: white;
+
+            padding: 9px 16px;
+
+            border-radius: 8px;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+        .logout-btn:hover {
+            background: #b71c1c;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .container {
+            width: 95%;
+            max-width: 1200px;
+
+            margin: 25px auto;
+        }
+
+        /* =========================
+           USER PROFILE
+        ========================= */
+
+        .user-profile {
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 15px;
+
+            margin-bottom: 20px;
+
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .user-profile h2 {
+            margin-top: 0;
+            margin-bottom: 8px;
+
+            color: #1b5e20;
+        }
+
+        .user-profile p {
+            margin: 6px 0;
+        }
+
+        .role-badge {
+            display: inline-block;
+
+            margin-top: 8px;
+
+            background: #e8f5e9;
+            color: #1b5e20;
+
+            padding: 6px 12px;
+
+            border-radius: 20px;
+
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* =========================
+           CARDS
+        ========================= */
+
+        .cards {
+            display: grid;
+
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(220px, 1fr)
+            );
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 15px;
+
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .card h3 {
+            margin-top: 0;
+
+            color: #1b5e20;
+        }
+
+        .card p {
+            color: #666;
+        }
+
+        /* =========================
+           BUTTONS
+        ========================= */
+
+        .btn {
+            display: inline-block;
+
+            padding: 11px 18px;
+
+            border-radius: 8px;
+
+            text-decoration: none;
+
+            border: none;
+
+            cursor: pointer;
+
+            font-weight: bold;
+
+            margin-top: 8px;
+        }
+
+        .btn-green {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .btn-green:hover {
+            background: #1b5e20;
+        }
+
+        .btn-blue {
+            background: #1976d2;
+            color: white;
+        }
+
+        .btn-blue:hover {
+            background: #0d47a1;
+        }
+
+        /* =========================
+           INFO SECTION
+        ========================= */
+
+        .info-section {
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 15px;
+
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .info-section h2 {
+            margin-top: 0;
+
+            color: #1b5e20;
+        }
+
+        .info-section ul {
+            padding-left: 20px;
+        }
+
+        .info-section li {
+            margin-bottom: 10px;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            text-align: center;
+
+            padding: 25px;
+
+            color: #777;
+
+            font-size: 14px;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 600px) {
+
+            header {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+            .header-right {
+                width: 100%;
+
+                justify-content: space-between;
+            }
+
+            .container {
+                width: 92%;
+            }
+
+        }
+
+
+        /* =========================
+           PHASE 3.3 AI RECEIVER SELECTION
+        ========================= */
+
+        .ai-receiver-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .ai-receiver-section h2 {
+            margin-top: 0;
+            color: #1b5e20;
+        }
+
+        .ai-subtitle {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .food-ai-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 15px;
+            background: #fafafa;
+        }
+
+        .food-ai-card h3 {
+            margin: 0 0 8px;
+            color: #1b5e20;
+        }
+
+        .food-meta {
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+
+        .receiver-results {
+            margin-top: 18px;
+        }
+
+        .ai-status {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-top: 12px;
+            display: none;
+        }
+
+        .ai-status.loading {
+            display: block;
+            background: #e3f2fd;
+            color: #0d47a1;
+        }
+
+        .ai-status.error {
+            display: block;
+            background: #ffebee;
+            color: #b71c1c;
+        }
+
+        .ai-status.success {
+            display: block;
+            background: #e8f5e9;
+            color: #1b5e20;
+        }
+
+        .best-receiver {
+            border: 2px solid #2e7d32;
+            background: #f1f8e9;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 15px;
+        }
+
+        .receiver-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 18px;
+            margin-top: 12px;
+        }
+
+        .receiver-card.best {
+            border: 2px solid #2e7d32;
+        }
+
+        .receiver-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .receiver-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1b5e20;
+        }
+
+        .match-score {
+            background: #2e7d32;
+            color: white;
+            padding: 6px 11px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .score-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .score-item {
+            background: #f7f7f7;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 13px;
+        }
+
+        .score-item strong {
+            display: block;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .receiver-reason {
+            margin-top: 14px;
+            padding: 12px;
+            background: #f5f5f5;
+            border-left: 4px solid #2e7d32;
+            border-radius: 5px;
+            color: #444;
+            line-height: 1.5;
+        }
+
+        .ai-recommendation {
+            background: #e8f5e9;
+            color: #1b5e20;
+            padding: 14px;
+            border-radius: 9px;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+
+        .rescue-results {
+            margin-top: 14px;
+        }
+
+        .rescue-card {
+            background: #fff8e1;
+            border: 1px solid #ffcc80;
+            border-radius: 10px;
+            padding: 14px;
+            margin-top: 10px;
+        }
+
+        .rescue-critical {
+            border: 2px solid #e53935;
+            background: #ffebee;
+        }
+
+        .rescue-urgent {
+            border: 2px solid #fb8c00;
+            background: #fff3e0;
+        }
+
+        .rescue-normal {
+            border: 1px solid #81c784;
+            background: #e8f5e9;
+        }
+
+        .rescue-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .rescue-scan-box {
+            background: #fff8e1;
+            border: 1px solid #ffe082;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .radius-control {
+            margin-bottom: 18px;
+        }
+
+        .radius-control label {
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .radius-control select {
+            padding: 9px 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+        }
+
+        .agent-dashboard-section {
+            background: white;
+            border: 1px solid #d8e8dc;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .agent-dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .agent-dashboard-header h2 {
+            margin: 0;
+            color: #1b5e20;
+        }
+
+        .agent-dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .agent-metric {
+            background: #f8fbf9;
+            border: 1px solid #dfe9e2;
+            border-radius: 10px;
+            padding: 14px;
+        }
+
+        .agent-metric .metric-value {
+            display: block;
+            font-size: 27px;
+            font-weight: 800;
+            color: #1b5e20;
+            margin-top: 5px;
+        }
+
+        .agent-metric .metric-label {
+            color: #555;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .agent-status-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .agent-status-pill {
+            padding: 7px 10px;
+            border-radius: 18px;
+            background: #e8f5e9;
+            color: #1b5e20;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .agent-queue {
+            margin-top: 18px;
+        }
+
+        .agent-queue h3 {
+            margin-bottom: 10px;
+        }
+
+        .agent-queue-card {
+            border: 1px solid #ddd;
+            border-radius: 9px;
+            padding: 12px;
+            margin-top: 8px;
+            background: #fff;
+        }
+
+        .agent-queue-card.critical { border-left: 5px solid #d32f2f; background: #ffebee; }
+        .agent-queue-card.urgent { border-left: 5px solid #ef6c00; background: #fff3e0; }
+        .agent-queue-card.high, .agent-queue-card.rescue { border-left: 5px solid #f9a825; background: #fffde7; }
+        .agent-queue-card.normal { border-left: 5px solid #43a047; background: #e8f5e9; }
+        .agent-queue-card.unknown { border-left: 5px solid #757575; background: #f5f5f5; }
+
+        .agent-dashboard-loading {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            background: #eef8ff;
+            color: #145a7a;
+        }
+
+    </style>
+</head>
+
+<body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+
+    <h1>🍱 FoodLoop AI</h1>
+
+    <div class="header-right">
+
+        <span>
+            Provider Dashboard
+        </span>
+
+        <a
+            href="/logout"
+            class="logout-btn"
+        >
+            Logout
+        </a>
+
+    </div>
+
+</header>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<div class="container">
+
+
+    <!-- =========================
+         PERSONALIZED USER CARD
+    ========================= -->
+
+    <div class="user-profile">
+
+        <h2>
+            Welcome, {{ user["name"] }} 👋
+        </h2>
+
+        <p>
+            <strong>Email:</strong>
+            {{ user["email"] }}
+        </p>
+
+        <p>
+            <strong>Account ID:</strong>
+            {{ user["id"] }}
+        </p>
+
+        <span class="role-badge">
+            Provider Account
+        </span>
+
+    </div>
+
+
+    <!-- =========================
+         DASHBOARD CARDS
+    ========================= -->
+
+    <div class="cards">
+
+
+        <!-- POST FOOD -->
+
+        <div class="card">
+
+            <h3>🍱 Post Food</h3>
+
+            <p>
+                Share leftover food with nearby
+                people and organizations.
+            </p>
+
+            <a
+                href="/add-food"
+                class="btn btn-green"
+            >
+                Post Food
+            </a>
+
+        </div>
+
+
+        <!-- FOOD REQUESTS -->
+
+        <div class="card">
+
+            <h3>📦 Food Requests</h3>
+
+            <p>
+                View and manage requests from
+                receivers.
+            </p>
+
+            <a
+                href="/food-requests"
+                class="btn btn-blue"
+            >
+                View Requests
+            </a>
+
+        </div>
+
+
+        <!-- AVAILABLE FOOD -->
+
+        <div class="card">
+
+            <h3>📍 Food Availability</h3>
+
+            <p>
+                Check the food currently available
+                in the FoodLoop system.
+            </p>
+
+            <a
+                href="/available-foods"
+                class="btn btn-green"
+            >
+                View Food
+            </a>
+
+        </div>
+
+
+        <!-- ACCOUNT -->
+
+        <div class="card">
+
+            <h3>👤 My Account</h3>
+
+            <p>
+                You are currently logged in as:
+            </p>
+
+            <strong>
+                {{ user["name"] }}
+            </strong>
+
+            <br>
+
+            <small>
+                {{ user["email"] }}
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         PHASE 3.3 AI RECEIVER SELECTION
+    ========================= -->
+
+    <div class="ai-receiver-section">
+
+        <h2>🤖 AI Receiver Selection</h2>
+
+        <p class="ai-subtitle">
+            Let FoodLoop AI find and rank the best nearby receiver for your surplus food.
+            The AI ranks nearby receivers. You can then notify the best receivers. It never creates a food request automatically.
+        </p>
+
+        <div class="radius-control">
+            <label for="receiverRadius">Search radius:</label>
+            <select id="receiverRadius">
+                <option value="5">5 km</option>
+                <option value="10" selected>10 km</option>
+                <option value="20">20 km</option>
+                <option value="50">50 km</option>
+            </select>
+        </div>
+
+        <div class="rescue-scan-box">
+            <strong>🚨 Expiry / Rescue Agent</strong>
+            <p style="margin:8px 0 12px; color:#555;">
+                Scan your available food for listings that are approaching expiry.
+                The Rescue Agent prioritizes urgent food and can notify suitable nearby receivers.
+            </p>
+            <button
+                type="button"
+                class="btn btn-green"
+                onclick="scanExpiryRescue(this)"
+            >
+                🚨 Scan Expiry & Rescue
+            </button>
+            <div class="ai-status" id="expiry-scan-status"></div>
+            <div class="rescue-results" id="expiry-scan-results"></div>
+        </div>
+
+        <div class="rescue-scan-box" style="margin-top:16px; border-color:#8fd3ff; background:#eef8ff;">
+            <strong>🧠 Phase 3.6 Multi-Agent Workflow</strong>
+            <p style="margin:8px 0 12px; color:#555;">
+                Coordinate Receiver Selection, Food Matching verification, Expiry/Rescue analysis, and Notifications in one controlled workflow. It never creates a food request automatically.
+            </p>
+            <button type="button" class="btn btn-green" onclick="runWorkflowScan(this)">
+                🧠 Run Multi-Agent Workflow
+            </button>
+            <div class="ai-status" id="workflow-scan-status"></div>
+            <div class="rescue-results" id="workflow-scan-results"></div>
+        </div>
+
+        <div id="providerFoodList">
+
+            {% if food %}
+                {% for item in food %}
+                <div class="food-ai-card">
+
+                    <h3>🍱 {{ item["food_name"] }}</h3>
+
+                    <div class="food-meta">
+                        <strong>Type:</strong> {{ item.get("food_type", "Not specified") }}
+                        &nbsp; | &nbsp;
+                        <strong>Quantity:</strong> {{ item.get("quantity", "Not specified") }}
+                        <br>
+                        <strong>Pickup:</strong>
+                        {{ item.get("pickup_location", item.get("location", "Not specified")) }}
+                    </div>
+
+                    <button
+                        type="button"
+                        class="btn btn-green"
+                        onclick="findBestReceivers({{ item['id'] }}, this)"
+                    >
+                        🤖 Find Best Receivers
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn btn-green"
+                        style="margin-left:8px;"
+                        onclick="notifyBestReceivers({{ item['id'] }}, this)"
+                    >
+                        🔔 Notify Best Receivers
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn btn-green"
+                        style="margin-left:8px;"
+                        onclick="runExpiryRescue({{ item['id'] }}, this)"
+                    >
+                        🚨 Check Expiry / Rescue
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn btn-green"
+                        style="margin-left:8px;"
+                        onclick="runMultiAgentWorkflow({{ item['id'] }}, this)"
+                    >
+                        🧠 Run AI Workflow
+                    </button>
+
+                    <div class="ai-status" id="ai-status-{{ item['id'] }}"></div>
+                    <div class="receiver-results" id="receiver-results-{{ item['id'] }}"></div>
+                    <div class="notification-results" id="notification-results-{{ item['id'] }}"></div>
+                    <div class="rescue-results" id="rescue-results-{{ item['id'] }}"></div>
+                    <div class="rescue-results" id="workflow-results-{{ item['id'] }}"></div>
+
+                </div>
+                {% endfor %}
+            {% else %}
+
+                <div class="ai-status success" style="display:block;">
+                    You do not have any currently available food listings.
+                    Post food first to use AI Receiver Selection.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         PHASE 3.7 AGENT DASHBOARD
+    ========================= -->
+
+    <div class="agent-dashboard-section">
+
+        <div class="agent-dashboard-header">
+            <div>
+                <h2>📊 AI Agent Dashboard</h2>
+                <p style="margin:8px 0 0; color:#555;">
+                    Live view of your FoodLoop AI agents, food urgency, requests, receiver network, and rescue queue.
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="btn btn-green"
+                onclick="loadAgentDashboard(this)"
+            >
+                🔄 Refresh Agent Dashboard
+            </button>
+        </div>
+
+        <div id="agent-dashboard-status" class="agent-dashboard-loading">
+            Loading AI Agent Dashboard...
+        </div>
+
+        <div id="agent-dashboard-content" style="display:none;">
+
+            <div class="agent-dashboard-grid" id="agent-metrics-grid"></div>
+
+            <div class="agent-status-row" id="agent-status-row"></div>
+
+            <div class="agent-queue">
+                <h3>🚨 AI Rescue / Urgency Queue</h3>
+                <div id="agent-urgency-queue"></div>
+            </div>
+
+            <div class="agent-queue">
+                <h3>📦 Recent Food Requests</h3>
+                <div id="agent-request-queue"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- =========================
+         PROVIDER INFORMATION
+    ========================= -->
+
+    <div class="info-section">
+
+        <h2>
+            How FoodLoop AI Helps
+        </h2>
+
+        <ul>
+
+            <li>
+                Post surplus food before it gets wasted.
+            </li>
+
+            <li>
+                Provide an exact pickup location.
+            </li>
+
+            <li>
+                Nearby receivers can receive notifications.
+            </li>
+
+            <li>
+                Manage incoming food requests.
+            </li>
+
+            <li>
+                Help connect surplus food with people
+                who need it.
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    FoodLoop AI © 2026
+
+</footer>
+
+
+
+<script>
+async function runExpiryRescue(foodId, button) {
+    const radius = document.getElementById("receiverRadius").value;
+    const statusBox = document.getElementById(`ai-status-${foodId}`);
+    const resultsBox = document.getElementById(`rescue-results-${foodId}`);
+
+    if (!statusBox || !resultsBox) return;
+
+    button.disabled = true;
+    const originalText = button.textContent;
+    button.textContent = "🚨 Checking...";
+    statusBox.className = "ai-status loading";
+    statusBox.style.display = "block";
+    statusBox.textContent = "Expiry Agent is checking urgency and rescue options...";
+    resultsBox.innerHTML = "";
+
+    try {
+        const response = await fetch(
+            `/api/ai-expiry-rescue?food_id=${encodeURIComponent(foodId)}&max_distance=${encodeURIComponent(radius)}&notify=true`,
+            {
+                method: "POST",
+                headers: { "Accept": "application/json" },
+                credentials: "same-origin"
+            }
+        );
+
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || "Expiry / Rescue Agent failed.");
+        }
+
+        const urgency = data.urgency || {};
+        const level = String(urgency.level || "unknown");
+        const notified = Array.isArray(data.notified) ? data.notified : [];
+
+        if (level === "critical" || level === "urgent") {
+            statusBox.className = "ai-status error";
+        } else if (level === "high" || level === "rescue") {
+            statusBox.className = "ai-status";
+        } else {
+            statusBox.className = "ai-status success";
+        }
+
+        statusBox.textContent = data.message || "Expiry analysis completed.";
+
+        resultsBox.innerHTML = `
+            <div class="rescue-card ${level === "critical" ? "rescue-critical" : level === "urgent" ? "rescue-urgent" : "rescue-normal"}">
+                <div class="rescue-badge">
+                    ${escapeHtml(String(urgency.emoji || "❓"))}
+                    ${escapeHtml(String(urgency.label || "Unknown"))}
+                </div>
+                <div><strong>Time remaining:</strong> ${escapeHtml(String(data.time_text || "Unknown"))}</div>
+                <div><strong>Urgency score:</strong> ${Number(urgency.urgency_score || 0)}/100</div>
+                <div><strong>Receivers notified:</strong> ${notified.length}</div>
+            </div>
+            ${notified.map(item => `
+                <div class="receiver-card">
+                    <div class="receiver-header">
+                        <div class="receiver-name">🚨 #${Number(item.rank || 0)} ${escapeHtml(item.receiver_name || "Receiver")}</div>
+                        <div class="match-score">AI Match: ${Number(item.score || 0)}%</div>
+                    </div>
+                    <p>📍 ${escapeHtml(String(item.distance_km ?? "—"))} km away</p>
+                </div>
+            `).join("")}
+        `;
+
+    } catch (error) {
+        statusBox.className = "ai-status error";
+        statusBox.style.display = "block";
+        statusBox.textContent = "❌ " + error.message;
+        resultsBox.innerHTML = "";
+    } finally {
+        button.disabled = false;
+        button.textContent = originalText;
+    }
+}
+
+
+async function scanExpiryRescue(button) {
+    const radius = document.getElementById("receiverRadius").value;
+    const statusBox = document.getElementById("expiry-scan-status");
+    const resultsBox = document.getElementById("expiry-scan-results");
+
+    if (!statusBox || !resultsBox) return;
+
+    button.disabled = true;
+    const originalText = button.textContent;
+    button.textContent = "🚨 Scanning...";
+    statusBox.className = "ai-status loading";
+    statusBox.style.display = "block";
+    statusBox.textContent = "Scanning your available food listings for expiry risk...";
+    resultsBox.innerHTML = "";
+
+    try {
+        const response = await fetch(
+            `/api/ai-expiry-rescue-scan?max_distance=${encodeURIComponent(radius)}&notify=true`,
+            {
+                method: "POST",
+                headers: { "Accept": "application/json" },
+                credentials: "same-origin"
+            }
+        );
+
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || "Expiry scan failed.");
+        }
+
+        statusBox.className = "ai-status success";
+        statusBox.textContent = `${data.message || "Scan completed."} Urgent listings: ${Number(data.urgent_count || 0)}. Notifications: ${Number(data.notification_count || 0)}.`;
+
+        const foods = Array.isArray(data.foods) ? data.foods : [];
+        const urgentFoods = foods.filter(item => item.urgency && item.urgency.should_rescue);
+
+        if (urgentFoods.length === 0) {
+            resultsBox.innerHTML = `<div class="rescue-card rescue-normal">🟢 No food is currently within the Rescue Agent's 24-hour urgency window.</div>`;
+            return;
+        }
+
+        resultsBox.innerHTML = urgentFoods.map(item => {
+            const urgency = item.urgency || {};
+            const level = String(urgency.level || "unknown");
+            return `
+                <div class="rescue-card ${level === "critical" ? "rescue-critical" : level === "urgent" ? "rescue-urgent" : "rescue-normal"}">
+                    <div class="receiver-header">
+                        <div class="receiver-name">${escapeHtml(String(urgency.emoji || "🚨"))} ${escapeHtml(item.food_name || "Food")}</div>
+                        <div class="match-score">${escapeHtml(String(urgency.label || "Urgent"))}</div>
+                    </div>
+                    <p><strong>Time:</strong> ${escapeHtml(String(item.time_text || "Unknown"))}</p>
+                    <p><strong>Notifications:</strong> ${Array.isArray(item.notified) ? item.notified.length : 0}</p>
+                    <p>${escapeHtml(item.message || "")}</p>
+                </div>
+            `;
+        }).join("");
+
+    } catch (error) {
+        statusBox.className = "ai-status error";
+        statusBox.textContent = "❌ " + error.message;
+        resultsBox.innerHTML = "";
+    } finally {
+        button.disabled = false;
+        button.textContent = originalText;
+    }
+}
+
+
+async function findBestReceivers(foodId, button) {
+    const radius = document.getElementById("receiverRadius").value;
+    const statusBox = document.getElementById(`ai-status-${foodId}`);
+    const resultsBox = document.getElementById(`receiver-results-${foodId}`);
+
+    if (!statusBox || !resultsBox) {
+        return;
+    }
+
+    button.disabled = true;
+    const originalText = button.textContent;
+    button.textContent = "🤖 Finding Receivers...";
+
+    statusBox.className = "ai-status loading";
+    statusBox.style.display = "block";
+    statusBox.textContent = "AI is finding and ranking nearby receivers...";
+    resultsBox.innerHTML = "";
+
+    try {
+        const response = await fetch(
+            `/api/ai-receiver-matches?food_id=${encodeURIComponent(foodId)}&max_distance=${encodeURIComponent(radius)}`,
+            {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json"
+                },
+                credentials: "same-origin"
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || "Receiver selection failed.");
+        }
+
+        statusBox.className = "ai-status success";
+        statusBox.textContent =
+            `${data.candidate_count || 0} eligible receiver(s) found within ${radius} km.`;
+
+        renderReceiverResults(foodId, data);
+
+    } catch (error) {
+        statusBox.className = "ai-status error";
+        statusBox.style.display = "block";
+        statusBox.textContent = "❌ " + error.message;
+        resultsBox.innerHTML = "";
+    } finally {
+        button.disabled = false;
+        button.textContent = originalText;
+    }
+}
+
+async function notifyBestReceivers(foodId, button) {
+    const radius = document.getElementById("receiverRadius").value;
+    const statusBox = document.getElementById(`ai-status-${foodId}`);
+    const resultsBox = document.getElementById(`notification-results-${foodId}`);
+
+    if (!statusBox || !resultsBox) {
+        return;
+    }
+
+    button.disabled = true;
+    const originalText = button.textContent;
+    button.textContent = "🔔 Notifying...";
+    statusBox.className = "ai-status loading";
+    statusBox.style.display = "block";
+    statusBox.textContent = "AI is selecting eligible receivers and sending notifications...";
+    resultsBox.innerHTML = "";
+
+    try {
+        const response = await fetch(
+            `/api/ai-notify-receivers?food_id=${encodeURIComponent(foodId)}&max_distance=${encodeURIComponent(radius)}&max_notifications=3`,
+            {
+                method: "POST",
+                headers: { "Accept": "application/json" },
+                credentials: "same-origin"
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || "AI notification failed.");
+        }
+
+        const notified = Array.isArray(data.notified) ? data.notified : [];
+        statusBox.className = notified.length > 0 ? "ai-status success" : "ai-status";
+        statusBox.textContent = data.message || "Notification process completed.";
+
+        if (notified.length === 0) {
+            resultsBox.innerHTML = `
+                <div class="ai-status" style="display:block;">
+                    ${escapeHtml(data.message || "No new notifications were created.")}
+                </div>
+            `;
+            return;
+        }
+
+        resultsBox.innerHTML = `
+            <div class="ai-recommendation">
+                🔔 Notified ${notified.length} receiver(s). They can review the food and explicitly request it.
+            </div>
+            ${notified.map(item => `
+                <div class="receiver-card">
+                    <div class="receiver-header">
+                        <div class="receiver-name">🔔 #${Number(item.rank || 0)} ${escapeHtml(item.receiver_name || "Receiver")}</div>
+                        <div class="match-score">AI Match: ${Number(item.score || 0)}%</div>
+                    </div>
+                    <p>📍 ${escapeHtml(String(item.distance_km ?? "—"))} km away</p>
+                </div>
+            `).join("")}
+        `;
+
+    } catch (error) {
+        statusBox.className = "ai-status error";
+        statusBox.style.display = "block";
+        statusBox.textContent = "❌ " + error.message;
+        resultsBox.innerHTML = "";
+    } finally {
+        button.disabled = false;
+        button.textContent = originalText;
+    }
+}
+
+
+function renderReceiverResults(foodId, data) {
+    const resultsBox = document.getElementById(`receiver-results-${foodId}`);
+
+    if (!resultsBox) {
+        return;
+    }
+
+    const matches = Array.isArray(data.matches) ? data.matches : [];
+
+    if (matches.length === 0) {
+        resultsBox.innerHTML = `
+            <div class="ai-status error" style="display:block;">
+                No eligible receivers with saved locations were found within the selected radius.
+            </div>
+        `;
+        return;
+    }
+
+    let html = "";
+
+    if (data.recommendation) {
+        html += `
+            <div class="ai-recommendation">
+                🧠 ${escapeHtml(data.recommendation)}
+            </div>
+        `;
+    }
+
+    matches.forEach((receiver, index) => {
+        const breakdown = receiver.score_breakdown || {};
+        const isBest = index === 0;
+
+        html += `
+            <div class="receiver-card ${isBest ? "best" : ""}">
+
+                <div class="receiver-header">
+                    <div class="receiver-name">
+                        ${isBest ? "🥇 " : `#${index + 1} `}
+                        ${escapeHtml(receiver.receiver_name || "Receiver")}
+                    </div>
+
+                    <div class="match-score">
+                        AI Match: ${Number(receiver.score || 0)}%
+                    </div>
+                </div>
+
+                <p>
+                    📍 <strong>Distance:</strong>
+                    ${escapeHtml(String(receiver.distance_km ?? "—"))} km
+                </p>
+
+                <div class="score-grid">
+
+                    <div class="score-item">
+                        <strong>Distance</strong>
+                        ${Number(breakdown.distance || 0)}/50
+                    </div>
+
+                    <div class="score-item">
+                        <strong>Location Freshness</strong>
+                        ${Number(breakdown.location_freshness || 0)}/20
+                    </div>
+
+                    <div class="score-item">
+                        <strong>Eligibility</strong>
+                        ${Number(breakdown.eligibility || 0)}/20
+                    </div>
+
+                    <div class="score-item">
+                        <strong>Pickup Practicality</strong>
+                        ${Number(breakdown.pickup_practicality || 0)}/10
+                    </div>
+
+                </div>
+
+                <div class="receiver-reason">
+                    <strong>🤖 AI Reason:</strong>
+                    ${escapeHtml(receiver.reason || "Suitable based on the receiver ranking score.")}
+                </div>
+
+            </div>
+        `;
+    });
+
+    resultsBox.innerHTML = html;
+}
+
+function escapeHtml(value) {
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+async function runMultiAgentWorkflow(foodId, button) {
+    const radius = document.getElementById("receiverRadius").value;
+    const statusBox = document.getElementById(`ai-status-${foodId}`);
+    const resultsBox = document.getElementById(`workflow-results-${foodId}`);
+    if (!statusBox || !resultsBox) return;
+
+    button.disabled = true;
+    const originalText = button.textContent;
+    button.textContent = "🧠 Running...";
+    statusBox.className = "ai-status loading";
+    statusBox.style.display = "block";
+    statusBox.textContent = "Running the coordinated FoodLoop AI agents...";
+    resultsBox.innerHTML = "";
+
+    try {
+        const response = await fetch(
+            `/api/ai-multi-agent-workflow?food_id=${encodeURIComponent(foodId)}&max_distance=${encodeURIComponent(radius)}&max_notifications=3`,
+            { method: "POST", headers: { "Accept": "application/json" }, credentials: "same-origin" }
+        );
+        const data = await response.json();
+        if (!response.ok || !data.success) throw new Error(data.message || "Multi-Agent Workflow failed.");
+
+        statusBox.className = "ai-status success";
+        statusBox.textContent = data.message || "Multi-Agent Workflow completed.";
+
+        const urgency = data.urgency || {};
+        const best = data.best_receiver || {};
+        const notified = Array.isArray(data.notified) ? data.notified : [];
+        const agents = data.agents || {};
+        const level = String(urgency.level || "normal");
+
+        resultsBox.innerHTML = `
+            <div class="rescue-card ${level === "critical" ? "rescue-critical" : level === "urgent" ? "rescue-urgent" : "rescue-normal"}">
+                <div class="receiver-header">
+                    <div class="receiver-name">🧠 Multi-Agent Decision</div>
+                    <div class="match-score">${escapeHtml(String(data.action_agent || "none"))}</div>
+                </div>
+                <p><strong>Urgency:</strong> ${escapeHtml(String(level))}</p>
+                <p><strong>Best Receiver:</strong> ${escapeHtml(String(best.receiver_name || "No receiver found"))}</p>
+                <p><strong>Notifications Created:</strong> ${Number(data.notifications_created || 0)}</p>
+                <p><strong>Agents:</strong> Receiver Selection ${agents.receiver_selection ? "✅" : "❌"} · Food Matching ${agents.food_matching ? "✅" : "❌"} · Expiry/Rescue ${agents.expiry_rescue ? "✅" : "❌"} · Notification ${agents.notification ? "✅" : "❌"}</p>
+            </div>
+            ${notified.map(item => `
+                <div class="receiver-card">
+                    <div class="receiver-header">
+                        <div class="receiver-name">🔔 #${Number(item.rank || 0)} ${escapeHtml(item.receiver_name || "Receiver")}</div>
+                        <div class="match-score">AI Match: ${Number(item.score || 0)}%</div>
+                    </div>
+                    <p>📍 ${escapeHtml(String(item.distance_km ?? "—"))} km away</p>
+                </div>
+            `).join("")}
+        `;
+    } catch (error) {
+        statusBox.className = "ai-status error";
+        statusBox.textContent = "❌ " + error.message;
+        resultsBox.innerHTML = "";
+    } finally {
+        button.disabled = false;
+        button.textContent = originalText;
+    }
+}
+
+
+async function runWorkflowScan(button) {
+    const radius = document.getElementById("receiverRadius").value;
+    const statusBox = document.getElementById("workflow-scan-status");
+    const resultsBox = document.getElementById("workflow-scan-results");
+    if (!statusBox || !resultsBox) return;
+
+    button.disabled = true;
+    const originalText = button.textContent;
+    button.textContent = "🧠 Running...";
+    statusBox.className = "ai-status loading";
+    statusBox.style.display = "block";
+    statusBox.textContent = "Running the workflow for your available food...";
+    resultsBox.innerHTML = "";
+
+    try {
+        const response = await fetch(
+            `/api/ai-multi-agent-workflow-scan?max_distance=${encodeURIComponent(radius)}&max_notifications=3`,
+            { method: "POST", headers: { "Accept": "application/json" }, credentials: "same-origin" }
+        );
+        const data = await response.json();
+        if (!response.ok || !data.success) throw new Error(data.message || "Workflow scan failed.");
+        statusBox.className = "ai-status success";
+        statusBox.textContent = `${data.message || "Workflow scan completed."} Notifications: ${Number(data.notification_count || 0)}.`;
+        const foods = Array.isArray(data.foods) ? data.foods : [];
+        resultsBox.innerHTML = foods.length ? foods.map(item => {
+            const urgency = item.urgency || {};
+            return `<div class="rescue-card"><strong>${escapeHtml(String(urgency.level || "normal").toUpperCase())}</strong> — ${escapeHtml(String(item.food?.food_name || "Food"))}<br>${escapeHtml(String(item.message || "Workflow completed."))}</div>`;
+        }).join("") : `<div class="rescue-card rescue-normal">🟢 No available food listings were found for this provider.</div>`;
+    } catch (error) {
+        statusBox.className = "ai-status error";
+        statusBox.textContent = "❌ " + error.message;
+        resultsBox.innerHTML = "";
+    } finally {
+        button.disabled = false;
+        button.textContent = originalText;
+    }
+}
+
+
+
+async function loadAgentDashboard(button) {
+    const statusBox = document.getElementById("agent-dashboard-status");
+    const contentBox = document.getElementById("agent-dashboard-content");
+    const metricsGrid = document.getElementById("agent-metrics-grid");
+    const statusRow = document.getElementById("agent-status-row");
+    const urgencyQueue = document.getElementById("agent-urgency-queue");
+    const requestQueue = document.getElementById("agent-request-queue");
+
+    if (!statusBox || !contentBox) return;
+
+    const originalText = button ? button.textContent : "🔄 Refresh Agent Dashboard";
+    if (button) {
+        button.disabled = true;
+        button.textContent = "🔄 Loading...";
+    }
+
+    statusBox.className = "agent-dashboard-loading";
+    statusBox.style.display = "block";
+    statusBox.textContent = "AI Agent Dashboard is loading...";
+
+    try {
+        const response = await fetch("/api/agent-dashboard", {
+            method: "GET",
+            headers: { "Accept": "application/json" },
+            credentials: "same-origin"
+        });
+
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || "Agent Dashboard failed.");
+        }
+
+        const m = data.metrics || {};
+
+        const metrics = [
+            ["🍱", "Total Food", m.total_food],
+            ["📍", "Available Food", m.available_food],
+            ["🤝", "Collected Food", m.collected_food],
+            ["🚨", "Rescue Food", m.rescue_food],
+            ["🔴", "Critical Food", m.critical_food],
+            ["📦", "Total Requests", m.total_requests],
+            ["⏳", "Pending Requests", m.pending_requests],
+            ["✅", "Collected Requests", m.collected_requests],
+            ["📈", "Collection Success", `${Number(m.collection_success_rate || 0)}%`],
+            ["👥", "Receiver Network", m.receiver_network],
+            ["📡", "Active Receiver Locations", m.active_receiver_locations],
+            ["🔔", "AI Notifications", m.platform_ai_notifications]
+        ];
+
+        metricsGrid.innerHTML = metrics.map(item => `
+            <div class="agent-metric">
+                <div class="metric-label">${item[0]} ${escapeHtml(item[1])}</div>
+                <span class="metric-value">${escapeHtml(String(item[2] ?? 0))}</span>
+            </div>
+        `).join("");
+
+        const agents = data.agents || {};
+        const agentLabels = [
+            ["food_matching", "🍱 Food Matching"],
+            ["receiver_selection", "👥 Receiver Selection"],
+            ["notification", "🔔 Notification"],
+            ["expiry_rescue", "🚨 Expiry/Rescue"],
+            ["multi_agent_workflow", "🧠 Multi-Agent Workflow"]
+        ];
+
+        statusRow.innerHTML = agentLabels.map(([key, label]) => `
+            <span class="agent-status-pill">
+                ${agents[key] ? "✅" : "❌"} ${escapeHtml(label)}
+            </span>
+        `).join("");
+
+        const queue = Array.isArray(data.urgency_queue) ? data.urgency_queue : [];
+        if (!queue.length) {
+            urgencyQueue.innerHTML = `<div class="agent-queue-card normal">🟢 No available food is currently in the rescue queue.</div>`;
+        } else {
+            urgencyQueue.innerHTML = queue.map(item => {
+                const urgency = item.urgency || {};
+                const level = String(urgency.level || "unknown").toLowerCase();
+                const minutes = urgency.minutes_remaining;
+                let remaining = "Expiry time unavailable";
+                if (minutes !== null && minutes !== undefined) {
+                    if (Number(minutes) <= 0) remaining = "Expired";
+                    else if (Number(minutes) < 60) remaining = `${Number(minutes).toFixed(0)} minute(s) remaining`;
+                    else remaining = `${(Number(minutes) / 60).toFixed(1)} hour(s) remaining`;
+                }
+                return `
+                    <div class="agent-queue-card ${escapeHtml(level)}">
+                        <strong>${escapeHtml(String(urgency.label || level).toUpperCase())}</strong>
+                        — ${escapeHtml(item.food_name || "Food")}
+                        <br>
+                        Quantity: ${escapeHtml(String(item.quantity ?? "—"))}
+                        &nbsp; | &nbsp;
+                        ${escapeHtml(remaining)}
+                    </div>
+                `;
+            }).join("");
+        }
+
+        const requests = Array.isArray(data.recent_requests) ? data.recent_requests : [];
+        if (!requests.length) {
+            requestQueue.innerHTML = `<div class="agent-queue-card normal">No food requests yet.</div>`;
+        } else {
+            requestQueue.innerHTML = requests.map(request => `
+                <div class="agent-queue-card normal">
+                    <strong>${escapeHtml(request.receiver_name || "Receiver")}</strong>
+                    — ${escapeHtml(String(request.status || "pending")).toUpperCase()}
+                    <br>
+                    ${escapeHtml(String(request.receiver_organization || ""))}
+                </div>
+            `).join("");
+        }
+
+        statusBox.className = "ai-status success";
+        statusBox.style.display = "block";
+        statusBox.textContent = "✅ Agent Dashboard updated successfully.";
+        contentBox.style.display = "block";
+
+    } catch (error) {
+        statusBox.className = "ai-status error";
+        statusBox.style.display = "block";
+        statusBox.textContent = "❌ " + error.message;
+        contentBox.style.display = "none";
+    } finally {
+        if (button) {
+            button.disabled = false;
+            button.textContent = originalText;
+        }
+    }
+}
+
+</script>
+
+</body>
+
+</html>

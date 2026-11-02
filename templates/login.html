@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodLoop AI - Login</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #eafff0, #f5fff8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #263238;
+        }
+        .login-card {
+            width: min(92%, 365px);
+            background: white;
+            border-radius: 20px;
+            padding: 38px 30px 32px;
+            box-shadow: 0 12px 35px rgba(0,0,0,.10);
+            text-align: center;
+        }
+        .logo {
+            font-size: 38px;
+            margin-bottom: 10px;
+        }
+        h1 {
+            margin: 0;
+            color: #176b2c;
+            font-size: 27px;
+        }
+        .subtitle {
+            margin: 8px 0 28px;
+            color: #6b7c86;
+            font-size: 14px;
+        }
+        .form-group {
+            text-align: left;
+            margin-bottom: 18px;
+        }
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #34434c;
+        }
+        input {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #d5dde1;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+        input:focus {
+            border-color: #16a34a;
+            box-shadow: 0 0 0 3px rgba(22,163,74,.10);
+        }
+        .login-btn {
+            width: 100%;
+            border: 0;
+            border-radius: 9px;
+            padding: 12px;
+            background: #16a34a;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 3px;
+        }
+        .login-btn:hover { background: #12843b; }
+        .links {
+            margin-top: 18px;
+            font-size: 14px;
+            color: #667781;
+        }
+        .links a {
+            color: #159447;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .back {
+            display: block;
+            margin-top: 14px;
+            color: #657786 !important;
+            font-weight: 500 !important;
+        }
+        .error {
+            background: #fff1f1;
+            color: #b42318;
+            border: 1px solid #ffd0d0;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="logo">🍱</div>
+        <h1>FoodLoop AI</h1>
+        <div class="subtitle">Welcome back</div>
+
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <form method="post" action="/login">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="Enter your email"
+                    autocomplete="email"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    required
+                >
+            </div>
+
+            <button class="login-btn" type="submit">Login</button>
+        </form>
+
+        <div class="links">
+            Don't have an account?
+            <a href="/register">Create Account</a>
+
+            <a class="back" href="/">← Back to FoodLoop AI</a>
+        </div>
+    </div>
+</body>
+</html>

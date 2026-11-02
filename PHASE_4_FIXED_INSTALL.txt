@@ -1,0 +1,44 @@
+# FoodLoop AI - Phase 4 FIXED INSTALL
+
+This version fixes the SQLite error:
+
+sqlite3.IntegrityError: CHECK constraint failed: role IN ('provider', 'receiver')
+
+Do NOT change users.role to admin.
+
+1. Replace:
+   main.py
+   admin_dashboard.py
+   make_admin.py
+   ai_agent.py
+   notification_agent.py
+   expiry_rescue_agent.py
+   workflow_agent.py
+   agent_dashboard.py
+
+2. Replace:
+   templates/admin.html
+   templates/provider.html
+
+3. Keep your existing:
+   database.py
+   foodloop.db
+
+4. Stop the server:
+   Ctrl+C
+
+5. Promote an existing user to admin:
+   python make_admin.py YOUR_EXISTING_EMAIL
+
+6. Start:
+   uvicorn main:app --reload
+
+7. Login normally at:
+   http://127.0.0.1:8000/login
+
+8. Open:
+   http://127.0.0.1:8000/admin
+
+Admin authorization is stored in a separate admin_users table.
+Your existing users.role remains provider/receiver.
+No existing food, requests, notifications, or users are deleted.

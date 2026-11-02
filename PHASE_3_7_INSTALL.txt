@@ -1,0 +1,31 @@
+FOODLOOP AI - PHASE 3.7 AGENT DASHBOARD
+
+Files to replace/add:
+1. main.py                 -> replace
+2. provider.html           -> replace
+3. notification_agent.py   -> replace with the included fixed version
+4. agent_dashboard.py     -> ADD this new file
+5. Keep ai_agent.py, expiry_rescue_agent.py, workflow_agent.py from this package/current project.
+
+DO NOT replace:
+- database.py
+- foodloop.db
+
+Run:
+    uvicorn main:app --reload
+
+Expected startup:
+    FOODLOOP AI STARTED
+    AI Agent Available: True
+    Notification Agent Available: True
+    Expiry / Rescue Agent Available: True
+    Multi-Agent Workflow Available: True
+    Agent Dashboard Available: True
+
+Provider Dashboard:
+    Open /provider-dashboard
+    Scroll to AI Agent Dashboard.
+    Click "Refresh Agent Dashboard".
+
+The dashboard is live and provider-scoped. It does not create requests or modify food/request statuses.
+It uses the existing database schema; no migration is required.

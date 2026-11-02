@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FoodLoop AI - Post Food</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f7f4;color:#222}.nav{background:#176b24;color:#fff;padding:14px 24px;display:flex;justify-content:space-between;align-items:center}.brand{font-size:22px;font-weight:700}.nav a{color:#fff;text-decoration:none;font-weight:700;margin-left:18px}.wrap{max-width:850px;margin:35px auto;padding:0 18px}.card{background:#fff;border-radius:16px;padding:28px;box-shadow:0 5px 20px rgba(0,0,0,.08)}h1{color:#176b24;margin-top:0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.field{display:flex;flex-direction:column}.field.full{grid-column:1/-1}label{font-weight:700;margin-bottom:7px}input,select,textarea{padding:12px;border:1px solid #ccd5cf;border-radius:8px;font-size:15px}textarea{min-height:85px;resize:vertical}.actions{margin-top:22px;display:flex;gap:12px;flex-wrap:wrap}.btn{border:0;border-radius:8px;padding:12px 20px;background:#2b8738;color:#fff;font-weight:700;cursor:pointer}.btn.secondary{background:#1976d2}.msg{margin-top:18px;padding:12px;border-radius:8px;display:none}.ok{background:#e7f6e9;color:#176b24}.err{background:#fdeaea;color:#b71c1c}.hint{color:#666;font-size:13px;margin-top:5px}@media(max-width:700px){.grid{grid-template-columns:1fr}.field.full{grid-column:auto}}
+</style>
+</head>
+<body>
+<div class="nav"><div class="brand">🍱 FoodLoop AI</div><div><a href="/provider-dashboard">Provider Dashboard</a><a href="/logout">Logout</a></div></div>
+<div class="wrap"><div class="card">
+<h1>🍱 Post Surplus Food</h1>
+<p>Share safe leftover food with nearby receivers, NGOs and community organizations.</p>
+<form id="foodForm">
+<div class="grid">
+<div class="field"><label>Food Name *</label><input name="food_name" required maxlength="100" placeholder="e.g. Rice and Dal"></div>
+<div class="field"><label>Quantity *</label><input name="quantity" required maxlength="50" placeholder="e.g. 10 plates"></div>
+<div class="field"><label>Food Type *</label><select name="food_type" required><option value="">Select type</option><option>Vegetarian</option><option>Non-Vegetarian</option></select></div>
+<div class="field"><label>Available Until *</label><input type="datetime-local" name="available_until" required><div class="hint">Set the latest safe pickup time.</div></div>
+<div class="field"><label>Provider Name</label><input name="provider_name" value="{{ user.name if user else '' }}" maxlength="100"></div>
+<div class="field"><label>Contact *</label><input name="contact" required placeholder="10-digit mobile number"></div>
+<div class="field full"><label>Pickup / Location *</label><input name="location" required maxlength="250" placeholder="Hostel, restaurant, street or landmark"></div>
+<div class="field"><label>Latitude</label><input id="latitude" name="latitude" placeholder="Use My Location"></div>
+<div class="field"><label>Longitude</label><input id="longitude" name="longitude" placeholder="Use My Location"></div>
+</div>
+<div class="actions"><button class="btn secondary" type="button" onclick="useLocation()">📍 Use My Location</button><button class="btn" type="submit">🍱 Post Food</button><a class="btn" style="background:#666;text-decoration:none" href="/provider-dashboard">Cancel</a></div>
+</form><div id="msg" class="msg"></div>
+</div></div>
+<script>
+const msg=document.getElementById('msg');
+function show(text,ok){msg.textContent=text;msg.className='msg '+(ok?'ok':'err');msg.style.display='block';}
+function useLocation(){if(!navigator.geolocation){show('Geolocation is not supported by this browser.',false);return}navigator.geolocation.getCurrentPosition(p=>{document.getElementById('latitude').value=p.coords.latitude.toFixed(7);document.getElementById('longitude').value=p.coords.longitude.toFixed(7);show('Location captured successfully.',true)},()=>show('Unable to get your location. Please allow location access.',false));}
+document.getElementById('foodForm').addEventListener('submit',async e=>{e.preventDefault();msg.style.display='none';const data=Object.fromEntries(new FormData(e.target).entries());try{const r=await fetch('/post-food',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});const j=await r.json().catch(()=>({success:false,message:'Server returned an invalid response.'}));if(r.ok&&j.success){show(j.message||'Food posted successfully.',true);setTimeout(()=>location.href='/provider-dashboard',900)}else show(j.message||'Unable to post food.',false)}catch(err){show('Network/server error. Please try again.',false)}});
+</script>
+</body></html>

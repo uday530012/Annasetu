@@ -1,0 +1,51 @@
+FOODLOOP AI - PHASE 4: ADMIN & IMPACT ANALYTICS
+
+1. BACK UP your current project first.
+2. Keep your existing database.py and foodloop.db. This phase does NOT require a schema change.
+3. Copy the Phase 4 files into the same project structure:
+   - main.py -> project root (replace current Phase 3.7 main.py)
+   - admin_dashboard.py -> project root
+   - make_admin.py -> project root
+   - templates/admin.html -> templates/admin.html
+   - Keep your existing ai_agent.py, notification_agent.py, expiry_rescue_agent.py,
+     workflow_agent.py and provider.html.
+
+4. Promote your existing user to admin:
+   python make_admin.py YOUR_EMAIL
+   Example:
+   python make_admin.py uday@example.com
+
+   If your DB is elsewhere:
+   FOODLOOP_DB_PATH=/path/to/foodloop.db python make_admin.py YOUR_EMAIL
+
+5. Start:
+   uvicorn main:app --reload
+
+6. Open:
+   http://127.0.0.1:8000/admin
+
+7. Log in as the admin user. The dashboard is read-only analytics; it does not create
+   requests, change food status, or send notifications.
+
+Admin API:
+   GET /api/admin/dashboard
+   GET /api/admin/impact
+
+Security:
+   - /admin requires an authenticated session with role=admin.
+   - Provider/receiver users receive 403 from admin APIs.
+   - Existing Phase 2 security middleware remains in place.
+
+Phase 4 features:
+   - Admin dashboard
+   - Food rescue metrics
+   - Estimated meals/plates redistributed
+   - Provider/receiver counts
+   - Receiver location coverage
+   - Request status analytics
+   - Collection success rate
+   - Notification analytics
+   - Food-type distribution
+   - Monthly food activity
+   - Expiry/rescue queue
+   - Recent request/user activity

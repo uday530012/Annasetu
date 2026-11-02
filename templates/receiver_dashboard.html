@@ -1,0 +1,2664 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FoodLoop AI - Receiver Dashboard</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f8f7;
+            color: #1f2937;
+        }
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        .navbar {
+            height: 75px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 27px;
+            font-weight: 700;
+            color: #087f4f;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .nav-right a {
+            text-decoration: none;
+            color: #374151;
+            font-weight: 600;
+        }
+
+        .nav-right a:hover {
+            color: #087f4f;
+        }
+
+        .logout {
+            background: #ef4444;
+            color: white !important;
+            padding: 12px 20px;
+            border-radius: 10px;
+        }
+
+        /* =====================================================
+           MAIN CONTAINER
+        ===================================================== */
+
+        .container {
+            width: 92%;
+            max-width: 1500px;
+            margin: 35px auto;
+        }
+
+        /* =====================================================
+           USER HEADER
+        ===================================================== */
+
+        .welcome {
+            background: white;
+            padding: 28px;
+            border-radius: 18px;
+            margin-bottom: 25px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .welcome h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            color: #667085;
+            font-size: 16px;
+        }
+
+        /* =====================================================
+           STATS
+        ===================================================== */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .stat-card h3 {
+            color: #667085;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card strong {
+            font-size: 32px;
+            color: #087f4f;
+        }
+
+        /* =====================================================
+           LOCATION
+        ===================================================== */
+
+        .location-card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .location-card h2 {
+            margin-bottom: 10px;
+        }
+
+        .location-card p {
+            color: #667085;
+            margin-bottom: 18px;
+        }
+
+        .location-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .location-btn {
+            border: none;
+            background: #087f4f;
+            color: white;
+            padding: 13px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .location-btn:hover {
+            background: #06683f;
+        }
+
+        .location-status {
+            margin-top: 15px;
+            padding: 12px;
+            background: #eef8f3;
+            color: #087f4f;
+            border-radius: 10px;
+            display: none;
+        }
+
+        /* =====================================================
+           AI AGENT
+        ===================================================== */
+
+        .ai-section {
+            background: #ecfff5;
+            border: 1px solid #b7efd0;
+            border-radius: 22px;
+            padding: 35px;
+            margin-bottom: 35px;
+        }
+
+        .ai-header {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 15px;
+        }
+
+        .ai-icon {
+            width: 75px;
+            height: 75px;
+            border-radius: 20px;
+            background: #07854f;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+        }
+
+        .ai-header h2 {
+            font-size: 30px;
+        }
+
+        .ai-header p {
+            color: #667085;
+            margin-top: 6px;
+        }
+
+        .ai-description {
+            color: #667085;
+            margin-bottom: 25px;
+            font-size: 17px;
+        }
+
+        .ai-controls {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 1fr auto;
+            gap: 20px;
+            align-items: end;
+        }
+
+        .control-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 9px;
+        }
+
+        .control-group select,
+        .control-group input {
+            width: 100%;
+            height: 58px;
+            border: 1px solid #d9dee5;
+            border-radius: 12px;
+            padding: 0 18px;
+            background: white;
+            font-size: 16px;
+        }
+
+        .ai-button {
+            height: 58px;
+            border: none;
+            border-radius: 12px;
+            background: #07854f;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            padding: 0 25px;
+            cursor: pointer;
+        }
+
+        .ai-button:hover {
+            background: #056d41;
+        }
+
+        .ai-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .ai-message {
+            margin-top: 25px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .ai-success {
+            background: #e7f9ef;
+            color: #087f4f;
+        }
+
+        .ai-error {
+            background: #feecec;
+            color: #b42318;
+        }
+
+        /* =====================================================
+           AI RESULTS
+        ===================================================== */
+
+        .ai-results {
+            margin-top: 35px;
+        }
+
+        .ai-results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .ai-results-header h2 {
+            font-size: 28px;
+        }
+
+        .match-count {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .ai-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .ai-card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            border: 1px solid #dcefe4;
+            box-shadow: 0 7px 20px rgba(0,0,0,0.04);
+        }
+
+        .match-score {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 20px;
+            background: #d9f9e5;
+            color: #087f4f;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .ai-card h3 {
+            font-size: 25px;
+            margin-bottom: 18px;
+            text-transform: capitalize;
+        }
+
+        .ai-info {
+            line-height: 1.9;
+            color: #667085;
+        }
+
+        .ai-reason {
+            background: #f7f9fb;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 18px;
+            color: #374151;
+            line-height: 1.6;
+        }
+
+        .request-ai-btn {
+            width: 100%;
+            margin-top: 18px;
+            border: none;
+            background: #087f4f;
+            color: white;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .request-ai-btn:hover {
+            background: #06683f;
+        }
+
+        .empty-ai {
+            background: #f7f9fb;
+            padding: 45px;
+            border-radius: 15px;
+            text-align: center;
+            color: #667085;
+            font-size: 18px;
+        }
+
+        /* =====================================================
+           GENERAL SECTION
+        ===================================================== */
+
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-title h2 {
+            font-size: 28px;
+        }
+
+        /* =====================================================
+           FOOD GRID
+        ===================================================== */
+
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .food-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 18px;
+            padding: 25px;
+            background: white;
+        }
+
+        .food-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .food-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            text-transform: capitalize;
+        }
+
+        .food-info {
+            color: #667085;
+            line-height: 1.9;
+        }
+
+        .food-info strong {
+            color: #374151;
+        }
+
+        .request-btn {
+            width: 100%;
+            margin-top: 18px;
+            padding: 14px;
+            background: #087f4f;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* =====================================================
+           REQUESTS
+        ===================================================== */
+
+        .request-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .request-card {
+            background: #f8fafc;
+            border: 1px solid #e1e7ef;
+            border-radius: 18px;
+            padding: 28px;
+        }
+
+        .request-card h3 {
+            font-size: 25px;
+            margin-bottom: 18px;
+            text-transform: capitalize;
+        }
+
+        .request-info {
+            line-height: 2;
+            font-size: 17px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 7px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+            margin-left: 5px;
+        }
+
+        .status-requested,
+        .status-pending {
+            background: #fff2c7;
+            color: #9a6700;
+        }
+
+        .status-accepted {
+            background: #d9f9e5;
+            color: #087f4f;
+        }
+
+        .status-rejected {
+            background: #fee2e2;
+            color: #b42318;
+        }
+
+        .status-collected {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        /* =====================================================
+           COLLECT BUTTON
+        ===================================================== */
+
+        .collect-btn {
+            margin-top: 18px;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .collect-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .collect-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* =====================================================
+           NOTIFICATIONS
+        ===================================================== */
+
+        .notification-card {
+            padding: 18px;
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        .notification-card.unread {
+            background: #eef8f3;
+            border-color: #b7efd0;
+        }
+
+        .notification-message {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .notification-time {
+            color: #667085;
+            font-size: 13px;
+        }
+
+        .read-btn {
+            margin-top: 10px;
+            border: none;
+            background: #e5e7eb;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .mark-all-btn {
+            border: none;
+            background: #e5e7eb;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* =====================================================
+           MODAL
+        ===================================================== */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal-box {
+            width: 100%;
+            max-width: 550px;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .modal-box h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .modal-box p {
+            margin-bottom: 20px;
+            color: #667085;
+        }
+
+        .modal-box label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .modal-box input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #d9dee5;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            font-size: 16px;
+        }
+
+        .confirm-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: #087f4f;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .cancel-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: #e5e7eb;
+            margin-top: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* =====================================================
+           EMPTY
+        ===================================================== */
+
+        .empty {
+            padding: 45px;
+            text-align: center;
+            color: #667085;
+            background: #f8fafc;
+            border-radius: 15px;
+        }
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 1100px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .ai-controls {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .ai-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .food-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 750px) {
+
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .logo {
+                font-size: 21px;
+            }
+
+            .nav-right {
+                gap: 10px;
+            }
+
+            .nav-right a:not(.logout) {
+                display: none;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .ai-section {
+                padding: 22px;
+            }
+
+            .ai-controls {
+                grid-template-columns: 1fr;
+            }
+
+            .ai-grid,
+            .food-grid,
+            .request-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ai-results-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .welcome h1 {
+                font-size: 25px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ============================================================
+     NAVBAR
+============================================================ -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        🍱 FoodLoop AI
+    </div>
+
+    <div class="nav-right">
+
+        <a href="#notifications">
+            🔔 Notifications
+            <span id="notificationBadge"></span>
+        </a>
+
+        <a href="#available-food">
+            Available Food
+        </a>
+
+        <a href="#my-requests">
+            My Requests
+        </a>
+
+        <a href="/logout" class="logout">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<div class="container">
+
+
+<!-- ============================================================
+     WELCOME
+============================================================ -->
+
+<section class="welcome">
+
+    <h1>
+        Welcome, {{ user.name }}
+    </h1>
+
+    <p>
+        Receiver Dashboard
+        {% if user.email %}
+        • {{ user.email }}
+        {% endif %}
+    </p>
+
+</section>
+
+
+<!-- ============================================================
+     STATS
+============================================================ -->
+
+<section class="stats">
+
+    <div class="stat-card">
+
+        <h3>
+            Available Food
+        </h3>
+
+        <strong id="availableFoodCount">
+            {{ food|length }}
+        </strong>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <h3>
+            My Requests
+        </h3>
+
+        <strong id="requestCount">
+            {{ food_requests|length }}
+        </strong>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <h3>
+            Notifications
+        </h3>
+
+        <strong id="notificationCount">
+            {{ unread_count }}
+        </strong>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <h3>
+            AI Matches
+        </h3>
+
+        <strong id="aiMatchCount">
+            0
+        </strong>
+
+    </div>
+
+</section>
+
+
+<!-- ============================================================
+     LOCATION
+============================================================ -->
+
+<section class="location-card">
+
+    <h2>
+        📍 Your Location
+    </h2>
+
+    <p>
+        Share your current location so FoodLoop AI can find nearby
+        surplus food.
+    </p>
+
+    <div class="location-buttons">
+
+        <button
+            class="location-btn"
+            onclick="getMyLocation()">
+
+            📍 Use My Location
+
+        </button>
+
+        <button
+            class="location-btn"
+            onclick="saveLocationManually()">
+
+            💾 Save Location
+
+        </button>
+
+    </div>
+
+
+    <div
+        id="locationStatus"
+        class="location-status">
+    </div>
+
+</section>
+
+
+<!-- ============================================================
+     AI FOOD MATCHING AGENT
+============================================================ -->
+
+<section class="ai-section">
+
+    <div class="ai-header">
+
+        <div class="ai-icon">
+            🤖
+        </div>
+
+        <div>
+
+            <h2>
+                AI Food Matching Agent
+            </h2>
+
+            <p>
+                Gemini AI analyzes real available food and recommends
+                the most suitable options for you.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <p class="ai-description">
+
+        Select your food preference, maximum travel distance and
+        required quantity. FoodLoop AI will find nearby available
+        food and rank the best matches.
+
+    </p>
+
+
+    <div class="ai-controls">
+
+
+        <div class="control-group">
+
+            <label>
+                Food Type
+            </label>
+
+            <select id="aiFoodType">
+
+                <option value="Any Food">
+                    Any Food
+                </option>
+
+                <option value="Vegetarian">
+                    Vegetarian
+                </option>
+
+                <option value="Vegan">
+                    Vegan
+                </option>
+
+                <option value="Non-Vegetarian">
+                    Non-Vegetarian
+                </option>
+
+                <option value="Other">
+                    Other
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="control-group">
+
+            <label>
+                Maximum Distance
+            </label>
+
+            <select id="aiDistance">
+
+                <option value="2">
+                    2 km
+                </option>
+
+                <option value="5">
+                    5 km
+                </option>
+
+                <option value="10" selected>
+                    10 km
+                </option>
+
+                <option value="20">
+                    20 km
+                </option>
+
+                <option value="50">
+                    50 km
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="control-group">
+
+            <label>
+                Required Quantity
+            </label>
+
+            <input
+                type="number"
+                id="aiQuantity"
+                value="1"
+                min="1"
+                placeholder="Enter quantity">
+
+        </div>
+
+
+        <button
+            class="ai-button"
+            id="findAiButton"
+            onclick="findAIMatches()">
+
+            🤖 Find AI Matches
+
+        </button>
+
+    </div>
+
+
+    <div
+        id="aiMessage"
+        class="ai-message">
+    </div>
+
+
+    <!-- AI RESULTS -->
+
+    <div class="ai-results">
+
+        <div class="ai-results-header">
+
+            <h2>
+                🤖 AI Recommendations
+            </h2>
+
+            <div
+                class="match-count"
+                id="matchCount">
+
+                0 matches
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="aiResults">
+
+            <div class="empty-ai">
+
+                Select your preferences and click
+                <strong>Find AI Matches</strong>.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ============================================================
+     AVAILABLE FOOD
+============================================================ -->
+
+<section
+    class="section"
+    id="available-food">
+
+    <div class="section-title">
+
+        <h2>
+            🍱 Available Food
+        </h2>
+
+    </div>
+
+
+    {% if food %}
+
+    <div class="food-grid">
+
+        {% for item in food %}
+
+        <div class="food-card">
+
+            <div class="food-icon">
+                🍱
+            </div>
+
+            <h3>
+                {{ item.food_name }}
+            </h3>
+
+
+            <div class="food-info">
+
+                <div>
+                    <strong>
+                        Quantity:
+                    </strong>
+
+                    {{ item.quantity }}
+                </div>
+
+
+                <div>
+                    <strong>
+                        Food Type:
+                    </strong>
+
+                    {{ item.food_type }}
+                </div>
+
+
+                <div>
+                    <strong>
+                        Provider:
+                    </strong>
+
+                    {{ item.provider_name }}
+                </div>
+
+
+                {% if item.pickup_location %}
+
+                <div>
+                    <strong>
+                        Location:
+                    </strong>
+
+                    📍 {{ item.pickup_location }}
+                </div>
+
+                {% endif %}
+
+
+                {% if item.available_until %}
+
+                <div>
+                    <strong>
+                        Available Until:
+                    </strong>
+
+                    {{ item.available_until }}
+                </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <button
+                class="request-btn"
+                onclick="openRequestModal(
+                    {{ item.id }},
+                    '{{ item.food_name|replace("'", "\\'") }}'
+                )">
+
+                📦 Request This Food
+
+            </button>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <div class="empty">
+
+        <h3>
+            No surplus food available right now.
+        </h3>
+
+        <p>
+            Please check again later.
+        </p>
+
+    </div>
+
+    {% endif %}
+
+</section>
+
+
+<!-- ============================================================
+     MY FOOD REQUESTS
+============================================================ -->
+
+<section
+    class="section"
+    id="my-requests">
+
+    <div class="section-title">
+
+        <h2>
+            📦 My Food Requests
+        </h2>
+
+    </div>
+
+
+    <div
+        class="request-grid"
+        id="requestGrid">
+
+
+        {% if food_requests %}
+
+            {% for request in food_requests %}
+
+            <div
+                class="request-card"
+                id="request-card-{{ request.id }}">
+
+                <h3>
+                    {{ request.food_name }}
+                </h3>
+
+
+                <div class="request-info">
+
+                    <div>
+                        <strong>
+                            Quantity:
+                        </strong>
+
+                        {{ request.quantity }}
+                    </div>
+
+
+                    <div>
+                        <strong>
+                            Provider:
+                        </strong>
+
+                        {{ request.provider_name }}
+                    </div>
+
+
+                    {% if request.requested_at %}
+
+                    <div>
+                        <strong>
+                            Requested:
+                        </strong>
+
+                        {{ request.requested_at }}
+                    </div>
+
+                    {% endif %}
+
+
+                    <div>
+
+                        <strong>
+                            Status:
+                        </strong>
+
+
+                        {% set current_status =
+                            request.status|lower
+                            if request.status
+                            else "pending"
+                        %}
+
+
+                        <span
+                            class="status status-{{ current_status }}"
+                            id="status-{{ request.id }}">
+
+                            {{ request.status|capitalize
+                               if request.status
+                               else "Pending" }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==========================================
+                     MARK AS COLLECTED
+                =========================================== -->
+
+                {% if current_status == "accepted" %}
+
+                <button
+                    class="collect-btn"
+                    id="collect-btn-{{ request.id }}"
+                    onclick="markCollected(
+                        {{ request.id }},
+                        {{ request.food_id }}
+                    )">
+
+                    🍱 Mark as Collected
+
+                </button>
+
+                {% elif current_status == "collected" %}
+
+                <button
+                    class="collect-btn"
+                    disabled>
+
+                    ✅ Food Collected
+
+                </button>
+
+                {% endif %}
+
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty">
+
+                <h3>
+                    No food requests yet.
+                </h3>
+
+                <p>
+                    Use the AI Food Matching Agent above
+                    to find food near you.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+<!-- ============================================================
+     NOTIFICATIONS
+============================================================ -->
+
+<section
+    class="section"
+    id="notifications">
+
+    <div class="section-title">
+
+        <h2>
+            🔔 Notifications
+        </h2>
+
+        <button
+            class="mark-all-btn"
+            onclick="markAllNotificationsRead()">
+
+            Mark All Read
+
+        </button>
+
+    </div>
+
+
+    <div id="notificationList">
+
+        {% if notifications %}
+
+            {% for notification in notifications %}
+
+            <div
+                class="notification-card
+                {% if not notification.is_read %}
+                unread
+                {% endif %}"
+                id="notification-{{ notification.id }}">
+
+
+                <div class="notification-message">
+
+                    {{ notification.message }}
+
+                </div>
+
+
+                {% if notification.created_at %}
+
+                <div class="notification-time">
+
+                    {{ notification.created_at }}
+
+                </div>
+
+                {% endif %}
+
+
+                {% if not notification.is_read %}
+
+                <button
+                    class="read-btn"
+                    onclick="markNotificationRead(
+                        {{ notification.id }}
+                    )">
+
+                    Mark as Read
+
+                </button>
+
+                {% endif %}
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+        <div class="empty">
+
+            No notifications.
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+</div>
+
+
+<!-- ============================================================
+     REQUEST MODAL
+============================================================ -->
+
+<div
+    id="requestModal"
+    class="modal">
+
+    <div class="modal-box">
+
+        <h2>
+            📦 Request Food
+        </h2>
+
+
+        <p>
+            You are requesting:
+            <strong id="selectedFood"></strong>
+        </p>
+
+
+        <label>
+            Your Name
+        </label>
+
+        <input
+            id="receiverName"
+            type="text"
+            value="{{ user.name }}"
+            placeholder="Enter your name">
+
+
+        <label>
+            Mobile Number
+        </label>
+
+        <input
+            id="receiverContact"
+            type="tel"
+            placeholder="Enter mobile number">
+
+
+        <label>
+            Organization / Hostel / Ashram
+        </label>
+
+        <input
+            id="receiverOrganization"
+            type="text"
+            placeholder="Enter organization name">
+
+
+        <button
+            type="button"
+            class="confirm-btn"
+            onclick="submitRequest()">
+
+            Confirm Food Request
+
+        </button>
+
+
+        <button
+            type="button"
+            class="cancel-btn"
+            onclick="closeRequestModal()">
+
+            Cancel
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+/* ============================================================
+   GLOBAL VARIABLES
+============================================================ */
+
+let selectedFoodId = null;
+
+
+/* ============================================================
+   LOCATION
+============================================================ */
+
+function getMyLocation() {
+
+    const status =
+        document.getElementById("locationStatus");
+
+    if (!navigator.geolocation) {
+
+        status.style.display = "block";
+
+        status.textContent =
+            "❌ Geolocation is not supported by this browser.";
+
+        return;
+    }
+
+
+    status.style.display = "block";
+
+    status.textContent =
+        "📍 Getting your current location...";
+
+
+    navigator.geolocation.getCurrentPosition(
+
+        async function(position) {
+
+            const latitude =
+                position.coords.latitude;
+
+            const longitude =
+                position.coords.longitude;
+
+
+            await saveReceiverLocation(
+                latitude,
+                longitude
+            );
+
+        },
+
+        function(error) {
+
+            console.error(error);
+
+            status.textContent =
+                "❌ Unable to get your location. Please allow location access.";
+
+        },
+
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+        }
+    );
+}
+
+
+/* ============================================================
+   SAVE LOCATION
+============================================================ */
+
+async function saveReceiverLocation(
+    latitude,
+    longitude
+) {
+
+    const status =
+        document.getElementById(
+            "locationStatus"
+        );
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/receiver-location",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        latitude: latitude,
+                        longitude: longitude
+                    })
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (
+            response.ok &&
+            result.success
+        ) {
+
+            status.style.display =
+                "block";
+
+            status.textContent =
+                "✅ Location saved successfully. FoodLoop AI can now find nearby food.";
+
+        } else {
+
+            status.textContent =
+                result.message ||
+                "Unable to save location.";
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        status.textContent =
+            "❌ Unable to connect to FoodLoop AI.";
+
+    }
+}
+
+
+/* ============================================================
+   MANUAL LOCATION
+============================================================ */
+
+function saveLocationManually() {
+
+    getMyLocation();
+
+}
+
+
+/* ============================================================
+   AI MATCHING
+============================================================ */
+
+async function findAIMatches() {
+
+    const foodType =
+        document.getElementById(
+            "aiFoodType"
+        ).value;
+
+
+    const distance =
+        document.getElementById(
+            "aiDistance"
+        ).value;
+
+
+    const quantity =
+        document.getElementById(
+            "aiQuantity"
+        ).value;
+
+
+    const button =
+        document.getElementById(
+            "findAiButton"
+        );
+
+
+    const message =
+        document.getElementById(
+            "aiMessage"
+        );
+
+
+    const results =
+        document.getElementById(
+            "aiResults"
+        );
+
+
+    const count =
+        document.getElementById(
+            "matchCount"
+        );
+
+
+    if (!quantity || Number(quantity) <= 0) {
+
+        alert(
+            "Please enter a valid required quantity."
+        );
+
+        return;
+    }
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "🤖 AI Matching...";
+
+
+    message.style.display =
+        "block";
+
+    message.className =
+        "ai-message";
+
+    message.textContent =
+        "Gemini AI is analyzing available food...";
+
+
+    results.innerHTML =
+        '<div class="empty-ai">🤖 Searching for the best food matches...</div>';
+
+
+    try {
+
+        const url =
+            "/api/ai-agent-matches" +
+            "?food_type=" +
+            encodeURIComponent(foodType) +
+            "&max_distance=" +
+            encodeURIComponent(distance) +
+            "&needed_quantity=" +
+            encodeURIComponent(quantity);
+
+
+        const response =
+            await fetch(url);
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "AI Agent Response:",
+            data
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "AI matching failed."
+            );
+        }
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message ||
+                "No AI result."
+            );
+        }
+
+
+        const matches =
+            Array.isArray(data.matches)
+                ? data.matches
+                : [];
+
+
+        document.getElementById(
+            "aiMatchCount"
+        ).textContent =
+            matches.length;
+
+
+        count.textContent =
+            matches.length +
+            (
+                matches.length === 1
+                    ? " match"
+                    : " matches"
+            );
+
+
+        message.className =
+            "ai-message ai-success";
+
+        message.textContent =
+            "✅ Gemini AI matching completed successfully.";
+
+
+        if (matches.length === 0) {
+
+            results.innerHTML = `
+                <div class="empty-ai">
+                    No matching food was found within
+                    your selected distance.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        results.innerHTML = "";
+
+
+        matches.forEach(
+            function(match) {
+
+                const score =
+                    match.score ?? 0;
+
+                const foodId =
+                    match.food_id;
+
+                const foodName =
+                    escapeHtml(
+                        match.food_name || "Food"
+                    );
+
+                const foodTypeValue =
+                    escapeHtml(
+                        match.food_type || "Unknown"
+                    );
+
+                const quantityValue =
+                    escapeHtml(
+                        String(
+                            match.quantity ?? "-"
+                        )
+                    );
+
+                const provider =
+                    escapeHtml(
+                        match.provider_name || "Unknown"
+                    );
+
+                const distanceValue =
+                    match.distance_km ??
+                    match.distance ??
+                    "-";
+
+                const reason =
+                    escapeHtml(
+                        match.reason ||
+                        "Recommended based on your preferences and location."
+                    );
+
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+                card.className =
+                    "ai-card";
+
+
+                card.innerHTML = `
+
+                    <div class="match-score">
+                        AI Match: ${score}%
+                    </div>
+
+                    <h3>
+                        ${foodName}
+                    </h3>
+
+                    <div class="ai-info">
+
+                        🍽️
+                        <strong>
+                            Type:
+                        </strong>
+                        ${foodTypeValue}
+
+                        <br>
+
+                        📦
+                        <strong>
+                            Quantity:
+                        </strong>
+                        ${quantityValue}
+
+                        <br>
+
+                        🏢
+                        <strong>
+                            Provider:
+                        </strong>
+                        ${provider}
+
+                        <br>
+
+                        📍
+                        <strong>
+                            Distance:
+                        </strong>
+                        ${distanceValue} km
+
+                    </div>
+
+                    <div class="ai-reason">
+
+                        🤖
+                        <strong>
+                            AI Reason:
+                        </strong>
+
+                        <br>
+
+                        ${reason}
+
+                    </div>
+
+                    <button
+                        class="request-ai-btn"
+                        onclick="openRequestModal(
+                            ${Number(foodId)},
+                            '${escapeJs(
+                                match.food_name || "Food"
+                            )}'
+                        )">
+
+                        📦 Request Food
+
+                    </button>
+
+                `;
+
+
+                results.appendChild(
+                    card
+                );
+
+            }
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "AI MATCH ERROR:",
+            error
+        );
+
+
+        message.className =
+            "ai-message ai-error";
+
+        message.textContent =
+            "❌ " +
+            error.message;
+
+
+        results.innerHTML = `
+            <div class="empty-ai">
+                Unable to find AI matches.
+                Please check your location and try again.
+            </div>
+        `;
+
+    }
+
+    finally {
+
+        button.disabled = false;
+
+        button.textContent =
+            "🤖 Find AI Matches";
+
+    }
+}
+
+
+/* ============================================================
+   ESCAPE HTML
+============================================================ */
+
+function escapeHtml(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* ============================================================
+   ESCAPE JAVASCRIPT STRING
+============================================================ */
+
+function escapeJs(value) {
+
+    return String(value)
+        .replace(/\\/g, "\\\\")
+        .replace(/'/g, "\\'")
+        .replace(/"/g, '\\"')
+        .replace(/\n/g, "\\n")
+        .replace(/\r/g, "\\r");
+
+}
+
+
+/* ============================================================
+   REQUEST MODAL
+============================================================ */
+
+function openRequestModal(
+    foodId,
+    foodName
+) {
+
+    selectedFoodId =
+        foodId;
+
+
+    document.getElementById(
+        "selectedFood"
+    ).textContent =
+        foodName;
+
+
+    document.getElementById(
+        "requestModal"
+    ).style.display =
+        "flex";
+
+}
+
+
+function closeRequestModal() {
+
+    document.getElementById(
+        "requestModal"
+    ).style.display =
+        "none";
+
+}
+
+
+/* ============================================================
+   SUBMIT FOOD REQUEST
+============================================================ */
+
+async function submitRequest() {
+
+    const receiverName =
+        document.getElementById(
+            "receiverName"
+        ).value.trim();
+
+
+    const receiverContact =
+        document.getElementById(
+            "receiverContact"
+        ).value.trim();
+
+
+    const receiverOrganization =
+        document.getElementById(
+            "receiverOrganization"
+        ).value.trim();
+
+
+    if (!receiverName) {
+
+        alert(
+            "Please enter your name."
+        );
+
+        return;
+    }
+
+
+    if (!receiverContact) {
+
+        alert(
+            "Please enter your contact number."
+        );
+
+        return;
+    }
+
+
+    if (!selectedFoodId) {
+
+        alert(
+            "Food selection is missing."
+        );
+
+        return;
+    }
+
+
+    const button =
+        document.querySelector(
+            ".confirm-btn"
+        );
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "Submitting...";
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/request-food",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        food_id:
+                            selectedFoodId,
+
+                        receiver_name:
+                            receiverName,
+
+                        receiver_contact:
+                            receiverContact,
+
+                        receiver_organization:
+                            receiverOrganization
+
+                    })
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "Request Response:",
+            result
+        );
+
+
+        if (
+            response.ok &&
+            result.success
+        ) {
+
+            closeRequestModal();
+
+
+            alert(
+                "Food request submitted successfully! The provider has been notified."
+            );
+
+
+            location.reload();
+
+        }
+
+        else {
+
+            alert(
+                result.message ||
+                "Unable to create food request."
+            );
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Unable to connect to FoodLoop AI server."
+        );
+
+    }
+
+    finally {
+
+        button.disabled =
+            false;
+
+        button.textContent =
+            "Confirm Food Request";
+
+    }
+
+}
+
+
+/* ============================================================
+   MARK FOOD AS COLLECTED
+============================================================ */
+
+async function markCollected(
+    requestId,
+    foodId
+) {
+
+    if (
+        !confirm(
+            "Have you collected this food from the provider?"
+        )
+    ) {
+
+        return;
+    }
+
+
+    const button =
+        document.getElementById(
+            "collect-btn-" +
+            requestId
+        );
+
+
+    if (button) {
+
+        button.disabled =
+            true;
+
+        button.textContent =
+            "Marking as Collected...";
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/food/" +
+                foodId +
+                "/collected",
+                {
+                    method: "POST"
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "Collected Response:",
+            result
+        );
+
+
+        if (
+            response.ok &&
+            result.success
+        ) {
+
+
+            /* ---------------------------------------------
+               CHANGE STATUS
+            --------------------------------------------- */
+
+            const status =
+                document.getElementById(
+                    "status-" +
+                    requestId
+                );
+
+
+            if (status) {
+
+                status.textContent =
+                    "Collected";
+
+                status.className =
+                    "status status-collected";
+
+            }
+
+
+            /* ---------------------------------------------
+               CHANGE BUTTON
+            --------------------------------------------- */
+
+            if (button) {
+
+                button.disabled =
+                    true;
+
+                button.textContent =
+                    "✅ Food Collected";
+
+            }
+
+
+            alert(
+                "Food marked as collected successfully."
+            );
+
+        }
+
+        else {
+
+            throw new Error(
+                result.message ||
+                "Unable to mark food as collected."
+            );
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "COLLECT ERROR:",
+            error
+        );
+
+
+        alert(
+            error.message
+        );
+
+
+        if (button) {
+
+            button.disabled =
+                false;
+
+            button.textContent =
+                "🍱 Mark as Collected";
+
+        }
+
+    }
+
+}
+
+
+/* ============================================================
+   MARK NOTIFICATION READ
+============================================================ */
+
+async function markNotificationRead(
+    notificationId
+) {
+
+    try {
+
+        const response =
+            await fetch(
+                "/notifications/" +
+                notificationId +
+                "/read",
+                {
+                    method: "POST"
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (
+            response.ok &&
+            result.success
+        ) {
+
+            const card =
+                document.getElementById(
+                    "notification-" +
+                    notificationId
+                );
+
+
+            if (card) {
+
+                card.classList.remove(
+                    "unread"
+                );
+
+                const button =
+                    card.querySelector(
+                        ".read-btn"
+                    );
+
+                if (button) {
+
+                    button.remove();
+
+                }
+
+            }
+
+
+            updateNotificationCount();
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            error
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   MARK ALL NOTIFICATIONS READ
+============================================================ */
+
+async function markAllNotificationsRead() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/notifications/read-all",
+                {
+                    method: "POST"
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (
+            response.ok &&
+            result.success
+        ) {
+
+            document
+                .querySelectorAll(
+                    ".notification-card"
+                )
+                .forEach(
+                    function(card) {
+
+                        card.classList.remove(
+                            "unread"
+                        );
+
+
+                        const button =
+                            card.querySelector(
+                                ".read-btn"
+                            );
+
+                        if (button) {
+
+                            button.remove();
+
+                        }
+
+                    }
+                );
+
+
+            updateNotificationCount();
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            error
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   UPDATE NOTIFICATION COUNT
+============================================================ */
+
+async function updateNotificationCount() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/notifications/count"
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (result.success) {
+
+            const count =
+                result.count || 0;
+
+
+            document.getElementById(
+                "notificationCount"
+            ).textContent =
+                count;
+
+
+            const badge =
+                document.getElementById(
+                    "notificationBadge"
+                );
+
+
+            if (count > 0) {
+
+                badge.textContent =
+                    "(" + count + ")";
+
+            }
+
+            else {
+
+                badge.textContent =
+                    "";
+
+            }
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            error
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   CLOSE MODAL WHEN CLICKING OUTSIDE
+============================================================ */
+
+window.onclick =
+    function(event) {
+
+        const modal =
+            document.getElementById(
+                "requestModal"
+            );
+
+
+        if (
+            event.target === modal
+        ) {
+
+            closeRequestModal();
+
+        }
+
+    };
+
+
+/* ============================================================
+   AUTOMATIC LOCATION
+============================================================ */
+
+window.addEventListener(
+    "load",
+    function() {
+
+        updateNotificationCount();
+
+        /*
+         * Do not automatically request GPS permission.
+         * The receiver can click "Use My Location".
+         */
+
+    }
+);
+
+
+</script>
+
+
+</body>
+
+</html>
